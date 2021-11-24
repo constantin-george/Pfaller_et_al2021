@@ -71,7 +71,6 @@ testDispersion(null.OCF.Model); testDispersion(OCF.Model)
 ## model to account for overdispersion but underdispersion is present so lets 
 ## use a gen.pois model in the glmmTMB package and do distribution selection
 
-
 ICtab(null.OCF.Model,
 	  glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS
 	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,
@@ -98,7 +97,6 @@ simulationALL  <- simulateResiduals(fittedModel = OCF.Model, plot = F, n = 1000)
 plot(simulationNULL); plot(simulationALL)
 testDispersion(simulationOutput = simulationNULL, alternative ="less") 
 testDispersion(simulationOutput = simulationALL, alternative ="less") 
-## underdispersion still present in the BEACH model
 
 ## Final comparison
 ICtab(null.OCF.Model, OCF.Model,
@@ -137,8 +135,8 @@ confint(OCF.Model)
 emmeans(OCF.Model, ~ Beach, transform = "response")
 
 contrast(emmeans(OCF.Model, specs="Beach", transform = "response"),list(c(-1,1)))
-(exp(0.811) / exp(1.265) ) ## % underestimated is 0.635
-exp(0.811) - exp(1.265)    ## difference is on average 1.29
+(exp(fixef(OCF.Model)$cond[2]) / exp(fixef(OCF.Model)$cond[1]) ) ## % underestimated is 0.635
+exp(fixef(OCF.Model)$cond[2]) - exp(fixef(OCF.Model)$cond[1])    ## difference is on average 1.29
 
 #### ----------------------------------------- ####
 #### Model for ECF
@@ -175,7 +173,6 @@ summary(ECF.Model); sigma(ECF.Model)
 ## Checking the models
 testDispersion(null.ECF.Model); 
 testDispersion(ECF.Model); 
-## underdispersion still present in the BEACH model
 
 simulationNULL <- simulateResiduals(fittedModel = null.ECF.Model, plot = F, n = 1000)
 simulationALL  <- simulateResiduals(fittedModel = ECF.Model, plot = F, n = 1000)
@@ -217,8 +214,8 @@ ggplot(ssd, aes(x=ECF, fill= dist)) + facet_wrap(~Beach) +
 confint(ECF.Model)
 emmeans(ECF.Model, ~ Beach, transform = "response")
 contrast(emmeans(ECF.Model, specs="Beach", transform = "response"),list(c(-1,1)))
-(exp(0.864) / exp(1.364) ) ## % underestimated is 0.6065307
-exp(0.864) - exp(1.364)    ## difference is on average 1.539177
+(exp(fixef(ECF.Model)$cond[2]) / exp(fixef(ECF.Model)$cond[1]) ) ## % underestimated is 0.606603
+exp(fixef(ECF.Model)$cond[2]) - exp(fixef(ECF.Model)$cond[1])    ## difference is on average 1.538211
 
 #### ----------------------------------------- ####
 #### Model for RMI
@@ -254,7 +251,6 @@ RMI.Model      <-  glmmTMB(formula = beach.RMI.form, data= RMI, family=genpois(l
 						   control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)
 summary(null.RMI.Model); sigma(null.RMI.Model) ## returns the dispersion parameter
 summary(RMI.Model); sigma(RMI.Model) ## returns the dispersion parameter
-## exp(RMI.Model$sdr$par.fixed[3]) ## compute from the model output
 
 
 ## Checking the models
@@ -264,7 +260,6 @@ simulationNULL <- simulateResiduals(fittedModel = null.RMI.Model, plot = F)
 simulationALL  <- simulateResiduals(fittedModel = RMI.Model , plot = F)
 plot(simulationNULL); 
 plot(simulationALL)
-## underdispersion still present in the both models
 
 ## Final comparison
 ICtab(null.RMI.Model, RMI.Model ,
@@ -301,6 +296,9 @@ confint(RMI.Model)
 emmeans(RMI.Model, ~ 1, transform = "response")
 emmeans(RMI.Model, ~ Beach, transform = "response")
 contrast(emmeans(RMI.Model, specs="Beach", transform = "response"),list(c(-1,1)))
+(exp(fixef(RMI.Model)$cond[2]) / exp(fixef(RMI.Model)$cond[1]) ) ## % underestimated is 1.002551
+exp(fixef(RMI.Model)$cond[2]) - exp(fixef(RMI.Model)$cond[1])    ## difference is on average 0.007159968
+
 
 #### ----------------------------------------- ####
 #### Model for BP
@@ -349,7 +347,6 @@ simulationNULL <- simulateResiduals(fittedModel = null.BF.Model, plot = F)
 simulationALL  <- simulateResiduals(fittedModel = BF.Model , plot = F)
 plot(simulationNULL); 
 plot(simulationALL)
-## underdispersion still present in the both models
 
 ## Final comparison
 ICtab(null.BF.Model, BF.Model ,
@@ -385,8 +382,9 @@ ggplot(ssd, aes(x=BF, fill= dist)) + facet_wrap(~Beach) +
 confint(BF.Model)
 emmeans(BF.Model, ~ Beach, transform = "response")
 contrast(emmeans(BF.Model, specs="Beach", transform = "response"),list(c(-1,1)))
-(exp(0.324) / exp(0.733))  ## % underestimated is 0.6643142
-exp(0.733) - exp(0.324)    ## difference is on average 0.6986679
+(exp(fixef(BF.Model)$cond[2]) / exp(fixef(BF.Model)$cond[1]) ) ## % underestimated is 0.6640397
+exp(fixef(BF.Model)$cond[2]) - exp(fixef(BF.Model)$cond[1])    ## difference is on average 0.6993278
+
 
 #### ----------------------------------------- ####
 #### Model for RECRUITS
@@ -471,6 +469,7 @@ confint(REC.Model)
 emmeans(REC.Model, ~ 1, transform = "response")
 emmeans(REC.Model, specs= c("Beach"), transform = "response")
 contrast(emmeans(REC.Model, specs="Beach", transform = "response"), list(c(-1,1)))
+
 
 ### TABLE OF ALL THE MODELS
 tab_model(null.BF.Model,  BF.Model,

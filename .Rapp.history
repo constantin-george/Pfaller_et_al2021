@@ -1,659 +1,977 @@
-glm.pois <- glm(formula= y ~ x, data=data, family=poisson(link="log"))
-glm.pois
-glm_irls = function(X, y, weights=rep(1,nrow(X)), family=poisson(log), maxit=25, tol=1e-16) {#
-    if (!is(family, "family")) family = family()#
-    variance = family$variance#
-    linkinv = family$linkinv#
-    mu.eta = family$mu.eta#
-    etastart = NULL#
-#
-    nobs = nrow(X)    # needed by the initialize expression below#
-    nvars = ncol(X)   # needed by the initialize expression below#
-    eval(family$initialize) # initializes n and fitted values mustart#
-    eta = family$linkfun(mustart) # we then initialize eta with this#
-    dev.resids = family$dev.resids#
-    dev = sum(dev.resids(y, linkinv(eta), weights))#
-    devold = 0#
-    beta_old = rep(1, nvars)#
-#
-    for(j in 1:maxit)#
-    {#
-      mu = linkinv(eta) #
-      varg = variance(mu)#
-      gprime = mu.eta(eta)#
-      z = eta + (y - mu) / gprime # potentially -offset if you would have an offset argument as well#
-      W = weights * as.vector(gprime^2 / varg)#
-      beta = solve(crossprod(X,W*X), crossprod(X,W*z), tol=2*.Machine$double.eps)#
-      eta = X %*% beta # potentially +offset if you would have an offset argument as well#
-      dev = sum(dev.resids(y, mu, weights))#
-      if (abs(dev - devold) / (0.1 + abs(dev)) < tol) break#
-      devold = dev#
-      beta_old = beta#
-    }#
-    list(coefficients=t(beta), iterations=j)#
+1-pexp(a, rate=1/E.x)
+plot(x, 1/10*exp(-(1/10)*x)); abline(v=1-pexp(a, rate=1/E.x))
+plot(x, 1/10*exp(-(1/10)*x)); abline(v=pexp(a, rate=1/E.x))
+runif(1, 1, 6)
+p.die
+sum(p.die)
+x.die = 1:6
+p.die = rep(1/6, 6)
+x.die* p.die
+mean(x.die* p.die)
+sum(x.die* p.die)
+mean.die <- sum(x.die* p.die)
+mean.die/6
+mean.die/10
+out.die <- 1:6
+f.x(out.die)
+f.x <- function(x){#
+	return(x*0.5)#
+}#
+out.die <- 1:6#
+f.x(out.die)
+mean(f.x(out.die))
+f.x(mean(out.die))
+fnonlin.x <- function(x){#
+	return(x*2)#
 }
-## Dobson (1990) Page 93: Randomized Controlled Trial :#
-y <- counts <- c(18,17,15,20,10,20,25,13,12)#
-outcome <- gl(3,1,9)#
-treatment <- gl(3,3)#
-X <- model.matrix(counts ~ outcome + treatment)
-glm_irls(X=X, y=y, family=poisson(log))
-glm.fit(x=X, y=y, family = poisson(log))
-deviance(ml.estim)
-glm(y ~ 1, family=binomial)
-glm(formula= y ~ 1, data=data, family=poisson(link="log"))
-deviance(glm(formula= y ~ 1, data=data, family=poisson(link="log")))
-loglik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.dev  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   resid.dev = 2*(ml.estim$value - null.dev))#
-print(estimate)
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.dev  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   resid.dev = 2*(ml.estim$value - null.dev))
-data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.dev  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]])
-null.dev  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],
-null.dev  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]
-]
-2*(ml.estim$value - null.dev)
-resid.dev = 2*(ml.estim$value - null.dev))
-2*(-ml.estim$value - null.dev)
--ml.estim$value - null.dev
-null.dev
-logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]]
-null.dev  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],
--logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]]
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.dev  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]])
-estimate$resid.dev = 2*(ml.estim$value - null.dev)
-estimate$resid.dev = 2*(ml.estim$value - estimate$null.dev)
-ml.estim$value
-estimate$null.dev
-ml.estim
-glm(formula= y ~ x, data=data, family=poisson(link="log"));summary(glm.pois)
-glm(formula= y ~ x, data=data, family=poisson(link="log"))
-logLik(glm(formula= y ~ x, data=data, family=poisson(link="log")))
-logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]])
-logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))
-poisLLNull <- function(guess=guess, data=data){#
-	beta0 	= guess[1]#
-	LL.vec 	= rep(NA, dim(data)[1])#
-	for(i in 1:dim(data)[1]){#
-		lambda		= exp(beta0)#
-		LL.vec[i]	= dpois(data[,2][i], lambda=lambda, log=T)#
-	} #
-	negLL <- -sum(LL.vec)#
-	return(negLL)#
+plot(out.die, fnonlin.x(out.die))
+## Linear function#
+flin.x <- function(x){#
+	return(x*0.5)#
+}#
+out.die <- 1:6#
+mean(flin.x(out.die))#
+flin.x(mean(out.die))#
+#
+## Nonlinear function#
+fnonlin.x <- function(x){#
+	return(x^2)#
+}#
+plot(out.die, fnonlin.x(out.die))
+plot(out.die, fnonlin.x(out.die), type="o")
+mean(fnonlin.x(out.die))
+fnonlin.x(mean(out.die))
+fnonlin.x(mean(out.die))==fnonlin.x(mean(out.die))
+fnonlin.x(mean(out.die))==mean(fnonlin.x(out.die))
+flin.x(mean(out.die))==mean(flin.x(out.die))
+out.urv <- runif(50,1,6)
+out.urv <- round(runif(50,1 , 6))
+out.urv <- sample(1:6, 1, 100))
+out.urv <- sample(1:6, 1, 100)
+out.urv <- sample(1:6, 50, 100)
+out.urv <- sample(1:6, 50, replace=T)
+out.urv
+## generate 50 unif rv#
+out.urv <- sample(1:6, 50, replace=T)#
+n_trials <- 100#
+n_samples <- 100#
+for(i in 1:n_samples){#
+	outcomes = sample(1:6, n_samples, replace=T)#
+	res      = fnonlin.x(outcomes)#
+	v1       = mean(res)#
+	v2       = fnonlin.x(mean(outcomes))#
+	paste0(i, " = ", v1, " > ", v2)#
 }
-optim(par=guess, fn= poisLLNull, method="Nelder-Mead", data=data, hessian=TRUE)
-optim(par=guess[1], fn= poisLLNull, method="Nelder-Mead", data=data, hessian=TRUE)
-y <- c(1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, #
-       0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, #
-       1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0)#
-weight <- c(2.1, 2.5, 1.2, 1, 3, 2.1, 1.5, 2.2, 1.9, 2.7, 1.1, 2.9, 1.2, 2.1, #
-          2.2, 2.5, 1.9, 1.2, 2, 2.9, 2.2, 1.5, 3, 2.4, 1.2, 1.6, 2.3, 2.1, #
-          2.6, 2.4, 2.5, 2, 1, 1.4, 2.9, 1.5, 3, 2.9, 2.9, 2.1, 2.8, 2.7, 1, #
-          2.9, 1.1, 2.2, 1.3, 1.7, 1.5, 1.7)
-glm(y ~ as.factor(1:length(y)), family=binomial)
-mod_sat <- glm(y ~ as.factor(1:length(y)), family=binomial)
-glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"));summary(glm.pois)
-glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.dev  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.dev   = - logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))
-estimate$resid.dev = 2*(sat.LL - ml.estim$value)
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$resid.dev = 2*(sat.LL - ml.estim$value)
-estimate$resid.dev = 2*(estimate$sat.LL - ml.estim$value)
-estimate
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.LL  = logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$resid.dev = 2*(estimate$sat.LL - ml.estim$value)
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)#
-print(estimate)
-estimate$null.dev = -2*(estimate$sat.LL - ml.estim$value)
-estimate <- data.frame(beta      = ml.estim$par, #
-				   stder     = stder, #
-				   z_values  = ml.estim$par/stder,#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$null.dev = -2*(estimate$sat.LL - estimate$null.LL)#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)#
-print(estimate)#
-glm.pois <- glm(formula= y ~ x, data=data, family=poisson(link="log"));summary(glm.pois)#
-glm.negb <- glm.nb(formula= y ~ x, data=data)
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = #
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))),#
-				   null.dev = -2*(sat.LL - null.LL,#
-				   resid.dev = -2*(sat.LL - ml.estim$value)
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = #
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))),#
-				   null.dev = -2*(sat.LL - null.LL),#
-				   resid.dev = -2*(sat.LL - ml.estim$value))
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = 3,#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))),#
-				   null.dev = -2*(sat.LL - null.LL),#
-				   resid.dev = -2*(sat.LL - ml.estim$value))
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = 2*(ml.estim$value) + 2*(2),#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))),#
-				   )
-estimate$null.dev = -2*(estimate$sat.LL - estimate$null.LL)
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)
-}#
-ml.estim <- optim(par=guess, fn=poisLL, method="Nelder-Mead", data=data, hessian=TRUE)#
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = 2*(ml.estim$value) + 2*(2),#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))),#
-				   )#
-estimate$null.dev = -2*(estimate$sat.LL - estimate$null.LL)#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)#
-print(estimate)
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   AIC      = 2*(ml.estim$value) + 2*(2),#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$null.dev = -2*(estimate$sat.LL - estimate$null.LL)#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)#
-print(estimate)
-glm.pois <- glm(formula= y ~ x, data=data, family=poisson(link="log"));summary(glm.pois)
-43.276/48
-lengthg(data)
-length(data)
-dim(data)
-ml.estim <- optim(par=guess, fn=poisLL, method="Nelder-Mead", data=data, hessian=TRUE)#
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   df       = dim(data)[1] - 2,#
-				   AIC      = 2*(ml.estim$value) + 2*(2),#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$null.dev  = -2*(estimate$sat.LL - estimate$null.LL)#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)
-stder <- sqrt(diag(solve(ml.estim$hessian)))#
-estimate <- data.frame(beta     = ml.estim$par, #
-				   stder    = stder, #
-				   z_values = ml.estim$par/stder,#
-				   df       = dim(data)[1] - 2,#
-				   AIC      = 2*(ml.estim$value) + 2*(2),#
-				   null.LL  = -logLik(glm(formula= y ~ 1, data=data, family=poisson(link="log")))[[1]],#
-				   sat.LL   = -logLik(glm(formula= y ~ as.factor(1: length(y)), data=data, family=poisson(link="log"))))#
-estimate$null.dev  = -2*(estimate$sat.LL - estimate$null.LL)#
-estimate$resid.dev = -2*(estimate$sat.LL - ml.estim$value)#
-estimate$over.dis  = estimate$resid.dev/estimate$df
-print(estimate)
-glm.negb <- glm.nb(formula= y ~ x, data=data)
-AIC(glm.negb, glm.pois)
-clotting <- data.frame(#
-    u = c(5,10,15,20,30,40,60,80,100),#
-    lot1 = c(118,58,42,35,27,25,21,19,18),#
-    lot2 = c(69,35,26,21,18,16,13,12,12))#
-fit1 <- glm(lot1 ~ log(u), data=clotting, family=Gamma)
-## https://stat.ethz.ch/pipermail/r-help/2010-September/251336.html#
-clotting <- data.frame(#
-    u = c(5,10,15,20,30,40,60,80,100),#
-    lot1 = c(118,58,42,35,27,25,21,19,18),#
-    lot2 = c(69,35,26,21,18,16,13,12,12))#
-fit1 <- glm(lot1 ~ log(u), data=clotting, family=Gamma)#
-# Step 2: use optim#
-# define loglikelihood function to be maximized over#
-# theta is a vector of three parameters: intercept, cofficient for log(u) and dispersion parameter#
-loglik <- function(theta,data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- sum(dgamma(data$lot1,shape=1/theta[3],rate=1/(E*theta[3]),log=T))#
-       return(loglik)#
-}#
-#
-# use the glm result as initial values#
-theta <- c(as.vector(coef(fit1)),0.002446059)#
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE,#
-      control = list(fnscale = -1))
-loglik <- function(theta,data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- -sum(dgamma(data$lot1,shape=1/theta[3],rate=1/(E*theta[3]),log=T))#
-       return(loglik)#
-}#
-#
-# use the glm result as initial values#
-theta <- c(as.vector(coef(fit1)), 0.002446059)#
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE,#
-      control = list(fnscale = -1))#
-trace(loglik, tracer=quote(print(theta)))
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE,
-control = list(fnscale = -1))
-## https://stat.ethz.ch/pipermail/r-help/2010-September/251336.html#
-clotting <- data.frame(#
-    u = c(5,10,15,20,30,40,60,80,100),#
-    lot1 = c(118,58,42,35,27,25,21,19,18),#
-    lot2 = c(69,35,26,21,18,16,13,12,12))#
-fit1 <- glm(lot1 ~ log(u), data=clotting, family=Gamma)#
-# Step 2: use optim#
-# define loglikelihood function to be maximized over#
-# theta is a vector of three parameters: intercept, cofficient for log(u) and dispersion parameter#
-loglik <- function(theta,data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- -sum(dgamma(data$lot1,shape=1/theta[3],rate=1/(E*theta[3]),log=T))#
-       return(loglik)#
-}#
-#
-# use the glm result as initial values#
-theta <- c(as.vector(coef(fit1)), 0.002446059)#
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE, control = list(fnscale = -1))
-loglik <- function(theta, data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- sum(dgamma(data$lot1, shape=1/theta[3], rate=1/(E*theta[3]), log=T))#
-       return(-loglik)#
-}#
-#
-# use the glm result as initial values#
-theta <- c(as.vector(coef(fit1)), 0.002446059)
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE)
-theta <- log(c(as.vector(coef(fit1)), 0.002446059))
-## https://stat.ethz.ch/pipermail/r-help/2010-September/251336.html#
-clotting <- data.frame(#
-    u = c(5,10,15,20,30,40,60,80,100),#
-    lot1 = c(118,58,42,35,27,25,21,19,18),#
-    lot2 = c(69,35,26,21,18,16,13,12,12))#
-fit1 <- glm(lot1 ~ u, data=clotting, family=Gamma)
-loglik <- function(theta, data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- sum(dgamma(data$lot1, shape=1/theta[3], rate=1/(E*theta[3]), log=T))#
-       return(-loglik)#
-}#
-#
-# use th
-theta <- c(0,0,0)
-theta <- c(as.vector(coef(fit1)), 0.002446059)
-theta
-trace(loglik, tracer=quote(print(theta)))
-0.002446059
-theta[3]
-theta <- c(as.vector(coef(fit1)), 2)
-#theta <- c(0,0,0)
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE, control = list(fnscale = -1))
-clotting <- data.frame(#
-    u = c(5,10,15,20,30,40,60,80,100),#
-    lot1 = c(118,58,42,35,27,25,21,19,18),#
-    lot2 = c(69,35,26,21,18,16,13,12,12))#
-fit1 <- glm(lot1 ~ log(u), data=clotting, family=Gamma)#
-# Step 2: use optim#
-# define loglikelihood function to be maximized over#
-# theta is a vector of three parameters: intercept, cofficient for log(u) and dispersion parameter#
-loglik <- function(theta, data){#
-       E <- 1/(theta[1]+theta[2]*log(data$u))#
-       V <- theta[3]*E^2#
-       loglik <- sum(dgamma(data$lot1, shape=1/theta[3], rate=1/(E*theta[3]), log=T))#
-       return(-loglik)#
-}#
-#
-# use the glm result as initial values#
-theta <- c(as.vector(coef(fit1)), 2)#
-#theta <- c(0,0,0)#
-fit2 <- optim(theta, loglik,  clotting, gr = NULL, hessian = TRUE, control = list(fnscale = -1))
-################################################################################
-# Title: Optimisation of a Cox proportional hayard model using Optimx()#
-# Date: 2021-02-28#
-##
-# Author: Joshua P. Entrop#
-# Website: joshua-entrop.com#
-################################################################################
-#
-# 1. Prefix -------------------------------------------------------------------#
-#
-# Remove all files from ls#
-rm(list = ls())#
-#
-# Loading packages#
-require(survival)#
-require(optimx)#
-require(numDeriv)#
-require(purrr)#
-require(dplyr)#
-require(tibble)#
-require(broom)#
-#
-# 2. Loading data set ---------------------------------------------------------#
-#
-#Reading the example data set lung from the survival package#
-lung <- as.data.frame(survival::lung)#
-#
-#Recode dichotomous variables#
-lung$female <- ifelse(lung$sex == 2, 1, 0)#
-lung$status_n <- ifelse(lung$status == 2, 1, 0)#
-#
-#Removes time ties in data set#
-set.seed(2687153)#
-lung$time <- map_dbl(lung$time,#
-                     function(x){x + runif(1, -0.1, +0.1)})#
-#
-#Check if no ties are left#
-lung %>%#
-  count(time) %>%#
-  arrange(desc(n)) %>%#
-  head(5)
-# 3. Define log-likelihood function for Cox regression model ------------------#
-negll <- function(par){#
-#
-  #Extract guesses for beta1 and beta2#
-  beta1 <- par[1]#
-  beta2 <- par[2]#
-#
-  #Define dependent and independent variables#
-  m <- data.frame(t = lung$time,#
-                  d = lung$status_n,#
-                  x1 = lung$female,#
-                  x2 = lung$age)#
-#
-  #Calculate theta#
-  m$theta <- exp(beta1 * m$x1 + beta2 * m$x2)#
-#
-  #Calculate cumulative sum of theta with descending t#
-  m <- m %>%#
-    arrange(desc(t)) %>%#
-    mutate(thetaj = cumsum(theta))#
-#
-  #Estimate negative log likelihood value#
-  val <- -sum(m$d * ((m$x1 * beta1 + m$x2 * beta2) - log(m$thetaj)))#
-#
-  return(val)#
+n_trials <- 100#
+n_samples <- 100#
+for(i in 1:n_samples){#
+	outcomes = sample(1:6, n_samples, replace=T)#
+	res      = fnonlin.x(outcomes)#
+	v1       = mean(res)#
+	v2       = fnonlin.x(mean(outcomes))#
+	print(paste0(i, " = ", v1, " > ", v2))#
 }
-# 4. Define gradient function for Weibull regression model --------------------#
-negll_grad <- function(par){#
-#
-  #Extract guesses for beta1 and beta2#
-  beta1 <- par[1]#
-  beta2 <- par[2]#
-#
-  #Create output vector#
-  n <- length(par[1])#
-  gg <- as.vector(rep(0, n))#
-#
-  #Define dependent and independent variables#
-  m <- data.frame(t = lung$time,#
-                  d = lung$status_n,#
-                  x1 = lung$female,#
-                  x2 = lung$age)#
-#
-  #Calculate theta, thetaj, thetajx1 and thetajx2#
-  m$theta <- exp(beta1 * m$x1 + beta2 * m$x2)#
-#
-  m <- m %>%#
-    arrange(desc(t)) %>%#
-    mutate(thetaj = cumsum(theta),#
-           thetajx1 = cumsum(theta * x1),#
-           thetajx2 = cumsum(theta * x2))#
-#
-  #Calculate partial gradient functions#
-  gg[1] <- -sum(m$d * (m$x1 - (m$thetajx1 / m$thetaj)))#
-  gg[2] <- -sum(m$d * (m$x2 - (m$thetajx2 / m$thetaj)))#
-#
-  return(gg)#
+## generate 50 unif rv#
+out.urv <- sample(1:6, 50, replace=T)#
+n_trials <- 100#
+n_samples <- 100#
+for(i in 1:n_samples){#
+	outcomes = sample(1:6, n_samples, replace=T)#
+	res      = fnonlin.x(outcomes)#
+	v1       = mean(res)#
+	v2       = fnonlin.x(mean(outcomes))#
+	print(paste0(i, " = ", v1, " > ", v2, " is ", v1> v2))#
 }
-mygrad <- negll_grad(c(0, 0))
-grad
-numgrad <- grad(x = c(0, 0), func = negll)
-all.equal(mygrad, numgrad)
-grad(x = c(0, 0), func = negll)
-# 5. Find minimum of log-likelihood function ----------------------------------#
-# Passing names to the values in the par vector improves readability of results#
-opt <- optimx(par = c(beta_female = 0, beta_age = 0),#
-              fn = negll,#
-              gr = negll_grad,#
-              hessian = TRUE,#
-              control = list(trace = 0, all.methods = TRUE))#
-#
-# Show results for optimisation algorithms, that converged (convcode != 9999)#
-summary(opt, order = "value") %>%#
-  rownames_to_column("algorithm") %>%#
-  filter(convcode != 9999) %>%#
-  arrange(value) %>%#
-  select(algorithm, beta_female, beta_age, value) %>%#
-  head(5)
-# 6. Estimate regression coefficients using coxph  ----------------------------#
-cox_model <- coxph(Surv(time, status_n == 1) ~ female + age,#
-                          data = lung)#
-#
-# 7. Comparing results from optimx and Coxph ----------------------------------#
-coef_coxph <- unname(coef(cox_model))#
-coef_opt <- coef(opt)
-lapply(1:nrow(coef_opt), function(i){#
-#
-  opt_name <- attributes(coef_opt)$dimnames[[1]][i]#
-#
-  diff_beta_1 <- (coef_opt[i, 1] - coef_coxph[1])#
-  diff_beta_2 <- (coef_opt[i, 2] - coef_coxph[2])#
-#
-  mean_dif <- mean(diff_beta_1, diff_beta_2,#
-                   na.rm = TRUE)#
-#
-  data.frame(opt_name, mean_dif)#
-#
-}) %>%#
-  bind_rows() %>%#
-  filter(!is.na(mean_dif)) %>%#
-  mutate(mean_dif = abs(mean_dif)) %>%#
-  arrange(mean_dif)
-8. Estimate the standard error ----------------------------------------------#
-#
-#Extract hessian matrix for the Rcgmin optimisation#
-hessian_m <- attributes(opt)$details["Rcgmin", ][["nhatend"]]#
-#
-# Estimate se based on hessian matrix#
-fisher_info <- solve(hessian_m)#
-prop_se  <- sqrt(diag(fisher_info))#
-#
-# Compare the estimated se from our model with the one from the Coxph model#
-ses <- data.frame(se_rcgmin = prop_se,#
-                  se_coxph  = tidy(cox_model)[["std.error"]]) %>%#
-  print()#
-#
-all.equal(ses[,"se_rcgmin"], ses[, "se_coxph"])#
-#
-# 9. Estimate 95%CIs using estimation of SE -----------------------------------#
-#
-# Extracting estimates from the Rcgmin optimisaiton#
-coef_test <- coef(opt)["Rcgmin",]#
-#
-# Compute 95%CIs#
-upper <- coef_test + 1.96 * prop_se#
-lower <- coef_test - 1.96 * prop_se#
-#
-# Print estimate with 95%CIs#
-data.frame(Estimate = coef_test,#
-           CI_lower = lower,#
-           CI_upper = upper,#
-           se       = prop_se) %>%#
-  round(4)
-data.frame(Estimate = coef_test,#
-           CI_lower = lower,#
-           CI_upper = upper,#
-           se       = prop_se) %>%#
-  round(4)#
-cox_model
-ses
-# Print estimate with 95%CIs#
-data.frame(Estimate = coef_test,#
-           CI_lower = lower,#
-           CI_upper = upper,#
-           se       = prop_se) %>%#
-  round(4)#
-cox_model
-lung
-cox_model
-plot(cox_model)
-coxph(Surv(time, status_n == 1) ~ female + age,#
-                          data = lung)
-coxph(Surv(time, status_n == 1) ~ 1- as.factor(female) + age,#
-                          data = lung)
-coxph(Surv(time, status_n == 1) ~ as.factor(female) + age,#
-                          data = lung)
-str(lung)
-### Writing a lm using matrix notation#
-## Author:: George Glen#
-## Date:: 07/15/2021#
-#
-### THREE DIFFERENT WAYS OF WRITING A LM#
-#
-## Some important operations: matrix algebra#
-# t(): transpose of a matrix#
-# X %*% Y: matrix multiplication#
-# t(X) %*% X: SSx#
-# solve(X): finds the inverse of X#
-# (I = diag(3)): is an identity matrix#
-diag(3) %*% matrix(c(2,1,1,6,6,2,3,4,1),ncol=3,nrow=3)#
-# I %*% (t(X) %*% X): Also defines an identity matrix#
-diag(3) %*% ( t(matrix(c(2,1,1,6,6,2,3,4,1),ncol=3,nrow=3)) %*% matrix(c(2,1,1,6,6,2,3,4,1),ncol=3,nrow=3))#
-# qr(A)$rank: QR decomposition returns rank value#
-qr(matrix(c(1, 2, 5, 1, 2, 2, 10, 6, 3, 4, 15, 1), ncol = 4, byrow = T))#
-# det(A): computes the determinant#
-det(matrix(c(2, 3, 4, 1), ncol = 2)) ## How much a matrix is changed under transformation#
-#### --------------------------------------- #####
-## Create some data#
-#### --------------------------------------- #####
-set.seed(123)#
-n   = 1000#
-x   = rnorm(n=n, mean=5, sd=1)#
-b0  = 5 #
-b1  = 1#
-b2  = -0.05#
-#y   = b0 + b1 * x + b2 * x^2 + rnorm(n=n) #
-y   = b0 + b1 * x + rnorm(n=n) #
-dat = data.frame(x,y); plot(dat$x, dat$y)#
-#### --------------------------------------- #####
-## Fit a LM#
-#### --------------------------------------- #####
-## 1: Using lm#
-base.lm <- lm(formula= y ~ x, data = dat); summary(lm.base)#
-vcov(base.lm)#
-e.lm <- as.matrix(residuals(base.lm))
-## 2: Using matrix notation#
-lm.matrix <- function(data=data){#
-	X = data$x#
-	Y = data$y#
-	N = dim(data)[1]#
-	design.mat = matrix(data = c(beta0 = rep(1, dim(data)[1]), X), nrow=N) ## This is the design matrix#
-	vcov.mat <- solve(t(design.mat) %*% design.mat)#
-	betas <- vcov.mat %*% t(design.mat) %*% Y#
-	e.mat <- I(design.mat %*% betas) - Y#
-	out <- list("betas"=betas, "residuals"=e.mat, #
-	            "design.matrix"=design.mat, "VCOV"=vcov.mat)#
-	return(out)#
+## generate 50 unif rv#
+out.urv <- sample(1:6, 50, replace=T)#
+n_trials <- 10#
+n_samples <- 100#
+for(i in 1: n_trials){#
+	outcomes = sample(1:6, n_samples, replace=T)#
+	res      = fnonlin.x(outcomes)#
+	v1       = mean(res)#
+	v2       = fnonlin.x(mean(outcomes))#
+	print(paste0(i, " = ", v1, " > ", v2, " is ", v1> v2))#
+}
+### arithmetic mean >= geometric mean#
+flog.x <- function(x){#
+	return(log(x))#
+}
+### arithmetic mean >= geometric mean#
+flog.x <- function(x){#
+	return(log(x))#
 }#
-mat.lm <- lm.matrix(data=dat)
-## 3: Using optim#
-## Write the likelihood function#
-lm.optim <- function(guess, data, loop=F){#
-	### initial parameters for regression parameters#
-	b0  = guess[1] #
-	b1  = guess[2]#
-	sig = guess[3]#
-	### The data in vector form#
-	X = data$x#
-	Y = data$y#
-	if(loop==T){#
-	    LL.vec = matrix(data=NA, nrow=dim(data)[1])#
-	    for(i in 1:dim(data)[1]){#
-	    mu         = b0 + b1 * X[[i]]#
-		LL.vec[i,] = dnorm(x=X[[i]], mean = mu, sd = sig, log=T)#
-		}#
-	}else{#
-	    mu         = b0 + b1 * X#
-		LL.vec = dnorm(x=Y, mean = mu, sd= sig, log=T)#
-	}#
-	return(-sum(LL.vec))#
+out.die <- 1:6#
+mean(flog.x(out.die))#
+flog.x(mean(out.die))
+flog.x(mean(out.die))==mean(flog.x(out.die))
+plot(out.die, flog.x(out.die), type="o")
+library(extRemes)
+install.packages("extRemes")
+library(fitdistrplus)#
+library(moments)
+? gofstat
+# how many seeds each bird gets on a simulation run, which is equivalent to how many fruits in a foraging session in the same tree#
+#
+# nseeds <- round(runif(1, 3, 6))#
+nseeds <- 5#
+#
+# Sample a random Gut Retention Time for each one of the seeds#
+grt_tt <- round(rgamma(nseeds, shape = 4, scale = 5) + 8)#
+#
+# Maximum gut retention time determines the simulation time#
+tt <- max(grt_tt)#
+#
+movrate <- 28#
+#
+# Sample movement distances from an exponential distribution. These are the lengths that the animal moves at each time step in minutes.#
+movedist <- rexp(tt, 1/movrate)#
+#
+# Movement algorithm for this random walk. Sample a random angle of movement from a uniform distribution. Determine the movement in x and y, the animal's trajectory is the cumulative sum of those. We are not imposing any limits to the area of movement.#
+angle <- runif(tt, min = 0, max = 360)#
+distx <- movedist*cos(angle)#
+xloc <- c(0, cumsum(distx))#
+disty <- movedist*sin(angle)#
+yloc <- c(0, cumsum(disty))#
+animalTraj <- data.frame(time = 0:tt, xloc = xloc, yloc = yloc)#
+#
+# Determine where the seeds are dropped based on the animal's location.#
+seed_loc <- data.frame(seed_id = 1:nseeds, time = grt_tt)#
+seed_loc <- merge(animalTraj, seed_loc, by = "time")#
+seed_loc$dispersal <- sqrt(seed_loc$xloc^2 + seed_loc$yloc^2)
+# Determine where the seeds are dropped based on the animal's location.#
+seed_loc <- data.frame(seed_id = 1:nseeds, time = grt_tt)#
+seed_loc <- merge(animalTraj, seed_loc, by = "time")#
+seed_loc$dispersal <- sqrt(seed_loc$xloc^2 + seed_loc$yloc^2)#
+#
+outsim <- list(lengths = movedist,#
+               movement = animalTraj,#
+              seed = seed_loc)#
+#
+# Calculate the mean location of seeds#
+x_m <- mean(outsim$seed$xloc)#
+y_m <- mean(outsim$seed$yloc)#
+mean_dispersal <- mean(outsim$seed$dispersal)#
+se_dispersal <- sd(outsim$seed$dispersal)/sqrt(length(outsim$seed$dispersal))#
+#
+# Calculate seed dispersion#
+xi <- (x_m - outsim$seed$xloc)^2#
+yi <- (y_m - outsim$seed$yloc)^2#
+seed_dispersion <- sum(sqrt(xi + yi))/length(outsim$seed$time)#
+par(mfrow = c(1,3))#
+hist(movedist, main = "MD")#
+plot(x = xloc, y = yloc, type = "l", main = "Movement")#
+points(x = seed_loc$xloc, y = seed_loc$yloc, col = "blue", pch = 16)#
+hist(seed_loc$dispersal, main = "Dispersal")#
+abline(v = mean_dispersal, col = "red")
+sim_run <- function(movrate){#
+#
+  nseeds <- 5#
+  grt_tt <- round(rgamma(nseeds, shape = 4, scale = 5) + 8)#
+  tt <- max(grt_tt)#
+#
+  movedist <- rexp(tt, 1/movrate)#
+#
+  angle <- runif(tt, min = 0, max = 360)#
+  distx <- movedist*cos(angle)#
+  xloc <- c(0, cumsum(distx))#
+  disty <- movedist*sin(angle)#
+  yloc <- c(0, cumsum(disty))#
+  animalTraj <- data.frame(time = 0:tt, xloc = xloc, yloc = yloc)#
+#
+  seed_loc <- data.frame(seed_id = 1:nseeds, time = grt_tt)#
+  seed_loc <- merge(animalTraj, seed_loc, by = "time")#
+  seed_loc$dispersal <- sqrt(seed_loc$xloc^2 + seed_loc$yloc^2)#
+#
+  x_m <- mean(seed_loc$xloc)#
+  y_m <- mean(seed_loc$yloc)#
+  mean_xy_dispersal <- sqrt((x_m^2) + (y_m^2))#
+  mean_dispersal <- mean(seed_loc$dispersal)#
+  se_dispersal <- sd(seed_loc$dispersal)/sqrt(length(seed_loc$dispersal))#
+#
+  # Calculate seed dispersion#
+  xi <- (x_m - seed_loc$xloc)^2#
+  yi <- (y_m - seed_loc$yloc)^2#
+  seed_dispersion <- sum(sqrt(xi + yi))/length(seed_loc$time)#
+#
+  outsim <- list(lengths = movedist,#
+                 movement = animalTraj,#
+                 seed = seed_loc,#
+                 mean_xy_dispersal = mean_xy_dispersal,#
+                 mean_dispersal = mean_dispersal,#
+                 se_dispersal = se_dispersal,#
+                 seed_dispersion = seed_dispersion)#
+#
+  return(outsim)#
 }#
-optim.lm <- optim(par=c(1,1,1), fn= lm.optim, data=dat, method="Nelder-Mead")
-## 4: predictions#
-predictions <- cbind(fitted(base.lm), #
-                     mat.lm$design.matrix %*% mat.lm$betas,#
-                  optim.lm$par[1] + optim.lm$par[2] * dat$x)
-predictions
-## Plot the results#
-par(mfrow=c(1,3))#
-plot(dat$x, dat$y, xlab="X", ylab="Y", pch=21, bg="grey20")#
-lines(dat$x, predictions[,1], col="darkblue", lwd=2)#
-plot(dat$x, dat$y, xlab="X", ylab="Y", pch=21, bg="grey20")#
-lines(dat$x, predictions[,2], col="darkgreen", lwd=1)#
-plot(dat$x, dat$y, xlab="X", ylab="Y", pch=21, bg="grey20")#
-lines(dat$x, predictions[,3], col="red", lwd=1)
-mat.lm
-data=dat
-X = data$x
-Y = data$y
-N = dim(data)[1]
-design.mat = matrix(data = c(beta0 = rep(1, dim(data)[1]), X), nrow=N) ## This is the design matrix
-design.mat
-vcov.mat <- solve(t(design.mat) %*% design.mat)
-vcov.mat
-betas
-vcov.mat %*% t(design.mat)
-t(design.mat) %*% Y
-vcov.mat %*% t(design.mat) %*% Y
-betas <- vcov.mat %*% t(design.mat) %*% Y
-I(design.mat %*% betas) - Y
+onerun <- sim_run(28)#
+#
+############# Simulations for the population#
+#
+library(dplyr)#
+library(purrr)#
+library(ggplot2)#
+library(purrr)#
+library(cowplot)#
+#
+set.seed(227)#
+#
+data(ptpl)#
+#
+null_moverate <- data.frame(Bird_ID = unique(ptpl$Bird_ID), movrate = mean(ptpl$mpm))#
+#
+indiv_moverate <- ptpl %>%#
+  group_by(Bird_ID) %>%#
+  summarise(movrate = mean(mpm))#
+#
+fam_moverate <- ptpl %>%#
+  group_by(fam_g) %>%#
+  summarise(movrate = mean(mpm))#
+#
+ids <- ptpl %>% distinct(., Bird_ID, fam_g)#
+#
+#### Null model#
+# Assume all individuals share the same movement rate, which is the average movement rate for all data points#
+#
+# Run 10,000 simulation runs per individual or family group#
+#
+nruns <- 10000#
+#
+null_dispersal <- NULL#
+null_dispersion <- NULL#
+for(j in 1:length(null_moverate$Bird_ID)){#
+  moverate <- null_moverate$movrate[j]#
+#
+  manysims <- vector("list", nruns)#
+  for(i in 1:length(manysims)){#
+    manysims[[i]] <- sim_run(moverate)#
+    manysims[[i]]$sim_run <- paste("sim_", i)#
+  }#
+#
+  dispersal <- map_df(manysims, "seed")$dispersal#
+  id <- null_moverate$Bird_ID[j]#
+  mean_xy_dispersal <- map_dbl(manysims, "mean_xy_dispersal")#
+  mean_dispersal <- map_dbl(manysims, "mean_dispersal")#
+  se_dispersal <- map_dbl(manysims, "se_dispersal")#
+  seed_dispersion <- map_dbl(manysims, "seed_dispersion")#
+#
+  out <- data.frame(dispersal = dispersal, id = id)#
+  null_dispersal <- rbind.data.frame(null_dispersal, out)#
+#
+  out2 <- data.frame(id = id,#
+                     mean_xy_dispersal = mean_xy_dispersal,#
+                     mean_dispersal = mean_dispersal,#
+                     se_dispersal = se_dispersal,#
+                     seed_dispersion = seed_dispersion)#
+  null_dispersion <- rbind.data.frame(null_dispersion, out2)#
+#
+}#
+#
+# Plots#
+plot_grid(#
+  null_dispersal %>%#
+    ggplot(., aes(x = dispersal)) +#
+    geom_histogram(),#
+  plot_grid(null_dispersion %>%#
+            ggplot(., aes(y = mean_dispersal)) +#
+            geom_boxplot(),#
+          null_dispersion %>%#
+            ggplot(., aes(y = seed_dispersion)) +#
+            geom_boxplot()), nrow = 2)#
+### Individual simulation#
+#
+indiv_dispersal <- NULL#
+indiv_dispersion <- NULL#
+for(j in 1:length(indiv_moverate$Bird_ID)){#
+  moverate <- indiv_moverate$movrate[j]#
+#
+  manysims <- vector("list", nruns)#
+  for(i in 1:length(manysims)){#
+    manysims[[i]] <- sim_run(moverate)#
+    manysims[[i]]$sim_run <- paste("sim_", i)#
+  }#
+#
+  dispersal <- map_df(manysims, "seed")$dispersal#
+  id <- indiv_moverate$Bird_ID[j]#
+  mean_xy_dispersal <- map_dbl(manysims, "mean_xy_dispersal")#
+  mean_dispersal <- map_dbl(manysims, "mean_dispersal")#
+  se_dispersal <- map_dbl(manysims, "se_dispersal")#
+  seed_dispersion <- map_dbl(manysims, "seed_dispersion")#
+#
+  out <- data.frame(dispersal = dispersal, id = id)#
+  indiv_dispersal <- rbind.data.frame(indiv_dispersal, out)#
+#
+  out2 <- data.frame(id = id,#
+                     mean_xy_dispersal = mean_xy_dispersal,#
+                     mean_dispersal = mean_dispersal,#
+                     se_dispersal = se_dispersal,#
+                     seed_dispersion = seed_dispersion)#
+  indiv_dispersion <- rbind.data.frame(indiv_dispersion, out2)#
+#
+}#
+#
+# plots#
+plot_grid(indiv_dispersal %>%#
+            ggplot(., aes(x = dispersal)) +#
+            geom_histogram(),#
+          plot_grid(indiv_dispersion %>%#
+                      ggplot(., aes(y = mean_dispersal)) +#
+                      geom_boxplot(),#
+                    indiv_dispersion %>%#
+                      ggplot(., aes(y = seed_dispersion)) +#
+                      geom_boxplot()), nrow = 2)#
+### Social or Family group simulation#
+#
+fam_dispersal <- NULL#
+fam_dispersion <- NULL#
+for(j in 1:length(fam_moverate$fam_g)){#
+  moverate <- fam_moverate$movrate[j]#
+#
+  manysims <- vector("list", nruns)#
+  for(i in 1:length(manysims)){#
+    manysims[[i]] <- sim_run(moverate)#
+    manysims[[i]]$sim_run <- paste("sim_", i)#
+  }#
+#
+  dispersal <- map_df(manysims, "seed")$dispersal#
+  id <- fam_moverate$fam_g[j]#
+  mean_xy_dispersal <- map_dbl(manysims, "mean_xy_dispersal")#
+  mean_dispersal <- map_dbl(manysims, "mean_dispersal")#
+  se_dispersal <- map_dbl(manysims, "se_dispersal")#
+  seed_dispersion <- map_dbl(manysims, "seed_dispersion")#
+#
+  out <- data.frame(dispersal = dispersal, id = id)#
+  fam_dispersal <- rbind.data.frame(fam_dispersal, out)#
+#
+  out2 <- data.frame(id = id,#
+                     mean_xy_dispersal = mean_xy_dispersal,#
+                     mean_dispersal = mean_dispersal,#
+                     se_dispersal = se_dispersal,#
+                     seed_dispersion = seed_dispersion)#
+  fam_dispersion <- rbind.data.frame(fam_dispersion, out2)#
+#
+}#
+#
+# Plots#
+plot_grid(#
+  fam_dispersal %>%#
+    ggplot(., aes(x = dispersal)) +#
+    geom_histogram(),#
+  plot_grid(fam_dispersion %>%#
+            ggplot(., aes(y = mean_dispersal)) +#
+            geom_boxplot(),#
+          fam_dispersion %>%#
+            ggplot(., aes(y = seed_dispersion)) +#
+            geom_boxplot()), nrow = 2)
+fm1 <- glmmTMB(count~mined+(1|spp),#
+                  ziformula=~mined,#
+                  data=Salamanders,#
+                  family=nbinom1)
+fm1R
+library(boot)
+summary(boot.ci(b1,type="perc"))
+boot.ci(b1,type="perc")
+fm1R <- refit(fm1, simulate(fm1)[[1]])
+?refit
+refit(fm1, simulate(fm1)[[1]])
+refit(fm1, simulate(fm1)[[1]], 100)
+refit(fm1, simulate(fm1)[[1]], 1000)
+summary(refit(fm1, simulate(fm1)[[1]], 1000))
+b1 <- lme4::bootMer(fm1, FUN=function(x) fixef(x)$zi, nsim=20, .progress="txt")#
+   if (requireNamespace("boot")) {#
+      boot.ci(b1,type="perc")#
+    }
+x2 <- sort(runif(100))#
+yb2 <- rbinom(100, prob = plogis(2*(x2-1)), size = 1)#
+yb2 <- factor(1 + yb2, labels = c("failure", "success"))#
+modb2 <- glm(yb2 ~ x2, family = binomial)#
+S4 <- simulate(modb2, nsim = 4)
+S4
+x <- 1:5#
+mod1 <- lm(c(1:3, 7, 6) ~ x)#
+S1 <- simulate(mod1, nsim = 4)#
+## repeat the simulation:#
+.Random.seed <- attr(S1, "seed")#
+identical(S1, simulate(mod1, nsim = 4))#
+#
+S2 <- simulate(mod1, nsim = 200, seed = 101)#
+rowMeans(S2) # should be about the same as#
+fitted(mod1)
+library(glmmTMB)
+## CREATE A MODEL#
+fm1 <- glmmTMB(count~mined+(1|spp),#
+                  ziformula=~mined,#
+                  data=Salamanders,#
+                  family=nbinom1)
+nrow  <- 100
+nrow  <- dim(Salamanders)[1]
+ncols <- 10#
+N  <- dim(Salamanders)[1]#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)
+ncols <- 10
+N     <- dim(Salamanders)[1]
+head(Salamanders)
+with(Salamanders, plot(count, Wtemp))
+with(Salamanders, plot(DOY, count))
+fm1 <- glmmTMB(count ~ DOY + (1|spp), data=Salamanders, family=nbinom1(link="log"))
+exp(-0.05749)
+with(Salamanders, plot(Wtemp, count))
+with(Salamanders, plot(cover, count))
+with(Salamanders, plot(cover, count))\
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))
+ncols     <- 10
+N         <- dim(Salamanders)[1]
+predict(fm1)
+predict(fm1, data=nice.xs)
+simulate(fm1)
+library(glmmTMB)#
+#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- 10#
+N         <- dim(Salamanders)[1]#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover) #
+for(i in 1:ncol){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]])#
+	boot.parm[,i] <- predict(refitted, data=nice.xs)#
+}
+predict(refitted, data=nice.xs)
+library(glmmTMB)#
+#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- 10#
+N         <- dim(Salamanders)[1]#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover)
+refitted      <- refit(fm1, simulate(fm1)[[1]])
+boot.parm[,i] <- predict(refitted, data=nice.xs)
+1:ncol
+ncols     <- 10#
+N         <- dim(Salamanders)[1]#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]])#
+	boot.parm[,i] <- predict(refitted, data=nice.xs)#
+}
+MLE.boot <- apply(boot.parm, 2, FUN=function(x){ exp(x[1]+x[2]*nice.xs) })
+refitted
+length(fixef(fm1))
+fixef(fm1)
+length(fixef(fm1)$cond)
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]])#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}
+fm1
+n.reps    <- 10000
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 10000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}
+library(glmmTMB)#
+#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- sort(Salamanders$cover) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}
+? refit
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1]+x[2]*nice.xs) })
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })
+MLE.boot
+Boot.cis <- apply(MLE.boot, 1,FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})
+nice.xs   <- sort(Salamanders$cover)
+nice.xs   <- seq(min(Salamanders$cover), max(Salamanders$cover), length.out=length(Salamanders$cover))
+nice.xs
+Boot.cis
+t(Boot.cis)
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix
+library(glmmTMB)#
+#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(Salamanders$cover), max(Salamanders$cover), length.out=length(Salamanders$cover)) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}#
+#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix
+MLE
+exp(MLE[1]+ MLE[2]*nice.xs)
+beta.hat <- exp(MLE[1]+ MLE[2]*nice.xs)
+beta.hat <- exp(MLE[1]+ MLE[2]*nice.xs)#
+plot(Salamanders$cover, Salamanders$count, #
+     type="p", lwd=2, bty="l", xlab="", ylab="", pch=16, cex.lab=1.75, xaxt = "n", cex.axis= 1.5)
+plot(Salamanders$cover, Salamanders$count, type="p", lwd=2, bty="l", xlab="", ylab="", pch=16, cex.lab=1.75, cex.axis= 1.5)
+lines(nice.xs, p.hat, col="grey10")
+lines(nice.xs, beta.hat, col="grey10")
+points(nice.xs, Boot.cis[,1], type="l", col="grey40", lwd=1.5, lty="dashed")
+points(nice.xs, Boot.cis[,3], type="l", col="grey40", lwd=1.5, lty="dashed")
+Salamanders
+beta.hat <- exp(MLE[1]+ MLE[2]*nice.xs)#
+plot(Salamanders$cover, Salamanders$count, type="p", lwd=2, bty="l", xlab="", ylab="", pch=16, cex.lab=1.75, cex.axis= 1.5)#
+lines(nice.xs, beta.hat, col="grey10")#
+points(nice.xs, Boot.cis[,1], type="l", col="grey40", lwd=1.5, lty="dashed")#
+points(nice.xs, Boot.cis[,3], type="l", col="grey40", lwd=1.5, lty="dashed")
+Salamanders$counts
+Salamanders$count <-
+Salamanders$count
+Salamanders[which(Salamanders$count>20),]
+Salamanders <- Salamanders[-which(Salamanders$count>20),]
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(Salamanders$cover), max(Salamanders$cover), length.out=length(Salamanders$cover)) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}#
+#
+MLE      <- fixef(fm1)$cond#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix#
+beta.hat <- exp(MLE[1]+ MLE[2]*nice.xs)#
+plot(Salamanders$cover, Salamanders$count, type="p", lwd=2, bty="l", xlab="", ylab="", pch=16, cex.lab=1.75, cex.axis= 1.5)#
+lines(nice.xs, beta.hat, col="grey10")#
+points(nice.xs, Boot.cis[,1], type="l", col="grey40", lwd=1.5, lty="dashed")#
+points(nice.xs, Boot.cis[,3], type="l", col="grey40", lwd=1.5, lty="dashed")
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(Salamanders$cover), max(Salamanders$cover), length.out=length(Salamanders$cover))
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}
+MLE      <- fixef(fm1)$cond
+dim(Salamanders)[1]
+dim(Salamanders)
+library(glmmTMB)#
+#
+## remove the outlier counts#
+Salamanders <- Salamanders[-which(Salamanders$count>20),]#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=Salamanders, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(Salamanders)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(Salamanders$cover), max(Salamanders$cover), length.out=length(Salamanders$cover)) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}#
+#
+MLE      <- fixef(fm1)$cond#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix#
+beta.hat <- exp(MLE[1]+ MLE[2]*nice.xs)#
+plot(Salamanders$cover, Salamanders$count, type="p", lwd=2, bty="l", xlab="", ylab="", pch=16, cex.lab=1.75, cex.axis= 1.5)#
+lines(nice.xs, beta.hat, col="grey10")#
+points(nice.xs, Boot.cis[,1], type="l", col="grey40", lwd=1.5, lty="dashed")#
+points(nice.xs, Boot.cis[,3], type="l", col="grey40", lwd=1.5, lty="dashed")
+library(glmmTMB)#
+#
+## remove the outlier counts#
+dat <- Salamanders[-which(Salamanders$count>20),]#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=dat, family=nbinom1(link="log"))
+library(glmmTMB)#
+#
+## remove the outlier counts#
+dat <- Salamanders[-which(Salamanders$count>20),]#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=dat, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(dat)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(dat$cover), max(dat$cover), length.out=length(dat$cover)) #
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}#
+#
+MLE      <- fixef(fm1)$cond#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix
+n.reps    <- 100000
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)
+nice.xs   <- seq(min(dat$cover), max(dat$cover), length.out=length(dat$cover))
+dat
+Salamanders[-which(Salamanders$count>20),]
+Salamanders[!which(Salamanders$count>20),]
+Salamanders[which(Salamanders$count<20),]
+dat <- Salamanders[which(Salamanders$count<20),]
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=dat, family=nbinom1(link="log"))
+ncols     <- length(fixef(fm1)$cond)
+N         <- dim(dat)[1]
+N
+## remove the outlier counts#
+dat <- Salamanders[which(Salamanders$count<20),]#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=dat, family=nbinom1(link="log"))#
+#
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(dat)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(dat$cover), max(dat$cover), length.out=length(dat$cover))
+for(i in 1:ncols){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[,i] <- fixef(refitted)$cond#
+}#
+#
+MLE      <- fixef(fm1)$cond#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis) # To put in the same format that Wald CI's matrix
+refit(fm1, simulate(fm1)[[1]], n.reps)
+fixef(refitted)$cond
+boot.parm
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(dat)[1]#
+n.reps    <- 100000 #
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(dat$cover), max(dat$cover), length.out=length(dat$cover)) #
+for(i in 1:N){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[i,] <- fixef(refitted)$cond#
+}
+library(glmmTMB)#
+#
+## remove the outlier counts#
+dat <- Salamanders[which(Salamanders$count<20),]#
+## CREATE A MODEL#
+fm1 <- glmmTMB(count ~ cover + (1|spp), data=dat, family=nbinom1(link="log"))#
+lme4::bootMer(fm1,nsim=100,FUN=function(x) unlist(fixef(x)))
+merBoot <- lme4::bootMer(fm1, nsim=100, FUN=function(x) unlist(fixef(x)))
+library(arm)
+display(fm1)
+merBoot
+I.lower = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=.025, na.rm=TRUE)))
+CI.upper = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=.975, na.rm=TRUE)))
+I.lower
+CI.upper
+cbind(lower  = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.025, na.rm=TRUE))),#
+	  med    = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.5, na.rm=TRUE)))#
+	  upper = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.975, na.rm=TRUE))))
+cbind(lower  = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.025, na.rm=TRUE))),#
+	  med    = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.5, na.rm=TRUE))),#
+	  upper = apply(merBoot$t, 2, function(x) as.numeric(quantile(x, probs=0.975, na.rm=TRUE))))
+print(fm1)
+merBoot$t
+## PARAMETRIC BOOTSTRAP#
+ncols     <- length(fixef(fm1)$cond)#
+N         <- dim(dat)[1]#
+n.reps    <- 100#
+boot.parm <- matrix(data=NA, ncol=ncols, nrow=N)#
+nice.xs   <- seq(min(dat$cover), max(dat$cover), length.out=length(dat$cover)) #
+#
+for(i in 1:N){#
+	refitted      <- refit(fm1, simulate(fm1)[[1]], n.reps)#
+	boot.parm[i,] <- fixef(refitted)$cond#
+}#
+#
+MLE      <- fixef(fm1)$cond#
+MLE.boot <- apply(boot.parm, 1, FUN=function(x){ exp(x[1] + x[2] * nice.xs ) })#
+Boot.cis <- apply(MLE.boot, 1, FUN=function(x){quantile(x,probs=c(0.025, 0.5, 0.975))})#
+Boot.cis <- t(Boot.cis)
+library(glmmTMB)#
+library(merTools)#
+#
+## remove the outlier count#
+dat <- Salamanders[which(Salamanders$count<20),]#
+#
+fm1 <- glmmTMB(count ~ cover + (1|spp), #
+               data=dat, family=nbinom2(link="log"))#
+fm2 <- glmer.nb(count ~ cover + (1|spp), data=dat)#
+summary(fm1); summary(fm2)
+source("/Users/georgeglen/Documents/GitHub/Pfaller_et_al2021/functions.r")#
+#
+## Load each dataset in individually#
+setwd("~/Documents/GitHub/Pfaller_et_al2021")#
+FULL <- fun$importExcel(#
+  fileName = "nesting_dat.xlsx",#
+  sheetNames = c("Recruitment","OCF", "ECF","RMI","BF","Production"),#
+  nskip = 0#
+);
+## Seperate the datasets#
+## 1: Clutch Frequency#
+OCF <- FULL[[2]] %>% gather("Beach", "OCF")#
+OCF$Beach <- str_replace_all(OCF$Beach, "OCF.", "")#
+OCF <- OCF %>% transform(Beach = as.factor(Beach),#
+					   OCF 	 = as.numeric(OCF)) %>%#
+			 filter(!is.na(OCF))#
+#
+ECF <- FULL[[3]] %>% gather("Beach", "ECF")#
+ECF$Beach <- str_replace_all(ECF$Beach, "ECF.", "")#
+ECF <- ECF %>% transform(Beach = as.factor(Beach),#
+					   ECF 	 = as.numeric(ECF)) %>%#
+			 filter(!is.na(ECF))#
+#
+## 2: RMI#
+RMI <- FULL[[4]] %>% gather("Beach", "RMI")#
+RMI$Beach <- str_replace_all(RMI$Beach, "RI.", "")#
+RMI <- RMI %>% transform(Beach = as.factor(Beach),#
+						 RMI 	 = as.numeric(RMI)) %>%#
+			   filter(!is.na(RMI))#
+## 3: BP#
+BF <- FULL[[5]] %>% gather("Beach", "BF")#
+BF$Beach <- str_replace_all(BF$Beach, "BF.", "")#
+BF <- BF %>% transform(Beach = as.factor(Beach),#
+					   BF 	 = as.numeric(BF)) %>%#
+			   filter(!is.na(BF))
+#### ----------------------------------------- #####
+#### Models#
+#### ----------------------------------------- #####
+#
+## Write out the model formulas#
+## 1: OCF#
+null.OCF.form <- formula(OCF ~ 1)#
+beach.OCF.form <- formula(OCF ~ Beach - 1)#
+#
+null.ECF.form <- formula(ECF ~ 1)#
+beach.ECF.form <- formula(ECF ~ Beach - 1)#
+#
+## 2: RMI #
+null.RMI.form <- formula(RMI ~ 1)#
+beach.RMI.form <- formula(RMI ~ Beach - 1)#
+#
+## 3: BP#
+null.BF.form <- formula(BF ~ 1)#
+beach.BF.form <- formula(BF ~ Beach - 1)#
+#
+#### ----------------------------------------- #####
+#### Model for OCF
+## Create initial models#
+null.OCF.Model <- glm(null.OCF.form, data = OCF, family=poisson(link="log"))#
+OCF.Model      <- glm(beach.OCF.form, data = OCF, family=poisson(link="log"))#
+#
+## check dispersion#
+testDispersion(null.OCF.Model); testDispersion(OCF.Model)
+testDispersion(null.OCF.Model); testDispersion(OCF.Model)
+## model to account for overdispersion but underdispersion is present so lets #
+## use a gen.pois model in the glmmTMB package and do distribution selection#
+#
+ICtab(null.OCF.Model,#
+	  glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))#
+ICtab(OCF.Model,#
+	  glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),na.action = na.exclude,#
+	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))
+## The final null and full model for the OCF data is a genpois model#
+null.OCF.Model <- glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude)#
+OCF.Model      <- glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),#
+                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
+summary(null.OCF.Model); sigma(null.OCF.Model) ## returns the dispersion parameter#
+summary(OCF.Model); sigma(OCF.Model)#
+#
+## Checking the models#
+simulationNULL <- simulateResiduals(fittedModel = null.OCF.Model, plot = F, n = 1000)#
+simulationALL  <- simulateResiduals(fittedModel = OCF.Model, plot = F, n = 1000)#
+plot(simulationNULL); plot(simulationALL)#
+testDispersion(simulationOutput = simulationNULL, alternative ="less") #
+testDispersion(simulationOutput = simulationALL, alternative ="less")
+simulationNULL <- simulateResiduals(fittedModel = null.OCF.Model, plot = F, n = 1000)
+simulationALL  <- simulateResiduals(fittedModel = OCF.Model, plot = F, n = 1000)
+plot(simulationNULL); plot(simulationALL)
+plot(simulationNULL);
+## Final comparison#
+ICtab(null.OCF.Model, OCF.Model,#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("NULL", "~Beach"))
+## Final comparison#
+ICtab(null.OCF.Model, OCF.Model,#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("NULL", "~Beach"))#
+## Model with beach is best between the two#
+#
+## compute the evidence ratio#
+evidence(aictab(cand.set = list(null.OCF.Model, OCF.Model), #
+                modnames = c("NULL", "FULL"), #
+                second.ord = TRUE))
+## compare simulated data to the observed data #
+simBEACH <- lapply(simulate(OCF.Model, seed = 1, nsim = 1000), function(x){ #
+	cbind(x, OCF, dist="gen.pois")#
+	})#
+simBEACH           <- do.call(rbind, simBEACH)[,-3]#
+OCF$dist           <- "observed"#
+colnames(simBEACH) <- colnames(OCF[,c(2,1,3)]) #
+ssd                <-  rbind(simBEACH, OCF)
+## plot#
+pal= c("#999999","#000000")#
+ggplot(ssd, aes(x=OCF, fill= dist)) + facet_wrap(~Beach) + #
+	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
+      xlab("Observed Clutch Frequency") + ylab(NULL) + #
+      scale_fill_manual(values =pal) + #
+      scale_x_continuous(limits = c(NA, 10)) +#
+      theme_classic(base_size=20) + #
+      theme(legend.title=element_blank(), #
+            legend.position = "top")
+## compute profile CI and mean differences#
+confint(OCF.Model)#
+emmeans(OCF.Model, ~ Beach, transform = "response")#
+#
+contrast(emmeans(OCF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
+(exp(0.811) / exp(1.265) ) ## % underestimated is 0.635#
+exp(0.811) - exp(1.265)    ## difference is on average 1.29
+ull.ECF.Model <- glm(null.ECF.form, data = ECF, family=poisson(link="log"))#
+ECF.Model      <- glm(beach.ECF.form, data = ECF, family=poisson(link="log"))#
+#
+## check dispersion#
+testDispersion(null.ECF.Model); testDispersion(ECF.Model)#
+#
+## Overdispersoin not present so we do not need to fit a negative binomial #
+## model to account for overdispersion but underdispersion is present so lets #
+## use a gen.pois model in the glmmTMB package and do distribution selection#
+ICtab(null.ECF.Model,#
+	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))#
+ICtab(ECF.Model,#
+	  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),na.action = na.exclude,#
+	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))
+null.ECF.Model <- glm(null.ECF.form, data = ECF, family=poisson(link="log"))#
+ECF.Model      <- glm(beach.ECF.form, data = ECF, family=poisson(link="log"))#
+#
+## check dispersion#
+testDispersion(null.ECF.Model); testDispersion(ECF.Model)#
+#
+## Overdispersoin not present so we do not need to fit a negative binomial #
+## model to account for overdispersion but underdispersion is present so lets #
+## use a gen.pois model in the glmmTMB package and do distribution selection#
+ICtab(null.ECF.Model,#
+	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))#
+ICtab(ECF.Model,#
+	  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),na.action = na.exclude,#
+	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("Poisson", "Generalized Poisson"))
+## The final null and full model for the ECF data is a genpois model#
+null.ECF.Model <- glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude)#
+ECF.Model      <- glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),#
+                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
+summary(null.ECF.Model); sigma(null.ECF.Model) ## returns the dispersion parameter#
+summary(ECF.Model); sigma(ECF.Model)#
+#
+## Checking the models#
+testDispersion(null.ECF.Model); #
+testDispersion(ECF.Model); #
+## underdispersion still present in the BEACH model
+testDispersion(ECF.Model);
+simulationNULL <- simulateResiduals(fittedModel = null.ECF.Model, plot = F, n = 1000)#
+simulationALL  <- simulateResiduals(fittedModel = ECF.Model, plot = F, n = 1000)#
+plot(simulationNULL)#
+plot(simulationALL)
+## Final comparison#
+ICtab(null.ECF.Model, ECF.Model,#
+	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
+	  weights=T, #
+	  mnames=c("NULL", "~Beach"))#
+## Model with beach is best#
+#
+## compute the evidence ratio#
+evidence(aictab(cand.set = list(null.ECF.Model, ECF.Model), #
+                modnames = c("NULL", "FULL"), second.ord = TRUE))
+## compare simulated data to the observed data #
+simBEACH <- lapply(simulate(ECF.Model, seed = 1, nsim = 1000), function(x){ #
+	cbind(x, ECF, dist="gen.pois")#
+	})#
+simBEACH           <- do.call(rbind, simBEACH)[,-3]#
+ECF$dist           <- "observed"#
+colnames(simBEACH) <- colnames(ECF[,c(2,1,3)]) #
+ssd                <-  rbind(simBEACH, ECF)#
+#
+## plot#
+ggplot(ssd, aes(x=ECF, fill= dist)) + facet_wrap(~Beach) + #
+	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
+      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
+      scale_fill_manual(values =pal) + #
+      scale_x_continuous(limits = c(NA, 10)) +#
+      theme_classic(base_size=20) + #
+      theme(legend.title=element_blank(), #
+            legend.position = "top")
+## compute profile CI and mean differences#
+confint(ECF.Model)#
+emmeans(ECF.Model, ~ Beach, transform = "response")#
+contrast(emmeans(ECF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
+(exp(0.864) / exp(1.364) ) ## % underestimated is 0.6065307#
+exp(0.864) - exp(1.364)    ## difference is on average 1.539177#
+#
+#### -----------------------------------------
+confint(ECF.Model)
+emmeans(ECF.Model, ~ Beach, transform = "response")
+contrast(emmeans(ECF.Model, specs="Beach", transform = "response"),list(c(-1,1)))
 source("/Users/georgeglen/Documents/GitHub/Pfaller_et_al2021/functions.r")#
 #
 ## Load each dataset in individually#
@@ -725,6 +1043,7 @@ testDispersion(null.OCF.Model); testDispersion(OCF.Model)#
 ## Overdispersoin not present so we do not need to fit a negative binomial #
 ## model to account for overdispersion but underdispersion is present so lets #
 ## use a gen.pois model in the glmmTMB package and do distribution selection#
+#
 ICtab(null.OCF.Model,#
 	  glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
 	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
@@ -738,7 +1057,7 @@ ICtab(OCF.Model,#
 	  mnames=c("Poisson", "Generalized Poisson"))	  #
 ## The final null and full model for the OCF data is a genpois model#
 null.OCF.Model <- glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude)#
-OCF.Model      <-  glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),#
+OCF.Model      <- glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),#
                           control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
 summary(null.OCF.Model); sigma(null.OCF.Model) ## returns the dispersion parameter#
 summary(OCF.Model); sigma(OCF.Model)#
@@ -749,7 +1068,6 @@ simulationALL  <- simulateResiduals(fittedModel = OCF.Model, plot = F, n = 1000)
 plot(simulationNULL); plot(simulationALL)#
 testDispersion(simulationOutput = simulationNULL, alternative ="less") #
 testDispersion(simulationOutput = simulationALL, alternative ="less") #
-## underdispersion still present in the BEACH model#
 #
 ## Final comparison#
 ICtab(null.OCF.Model, OCF.Model,#
@@ -789,89 +1107,17 @@ emmeans(OCF.Model, ~ Beach, transform = "response")#
 #
 contrast(emmeans(OCF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
 (exp(0.811) / exp(1.265) ) ## % underestimated is 0.635#
-exp(0.811) - exp(1.265)    ## difference is on average 1.29#
-#
-#### ----------------------------------------- #####
-#### Model for ECF#
-#### ----------------------------------------- #####
-#
-null.ECF.Model <- glm(null.ECF.form, data = ECF, family=poisson(link="log"))#
-ECF.Model      <- glm(beach.ECF.form, data = ECF, family=poisson(link="log"))#
-#
-## check dispersion#
-testDispersion(null.ECF.Model); testDispersion(ECF.Model)#
-#
-## Overdispersoin not present so we do not need to fit a negative binomial #
-## model to account for overdispersion but underdispersion is present so lets #
-## use a gen.pois model in the glmmTMB package and do distribution selection#
-ICtab(null.ECF.Model,#
-	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))#
-ICtab(ECF.Model,#
-	  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))	  #
-## The final null and full model for the ECF data is a genpois model#
-null.ECF.Model <- glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude)#
-ECF.Model      <-  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.ECF.Model); sigma(null.ECF.Model) ## returns the dispersion parameter#
-summary(ECF.Model); sigma(ECF.Model)#
-#
-## Checking the models#
-testDispersion(null.ECF.Model); #
-testDispersion(ECF.Model); #
-## underdispersion still present in the BEACH model#
-#
-simulationNULL <- simulateResiduals(fittedModel = null.ECF.Model, plot = F, n = 1000)#
-simulationALL  <- simulateResiduals(fittedModel = ECF.Model, plot = F, n = 1000)#
-plot(simulationNULL)#
-plot(simulationALL)#
-#
-## Final comparison#
-ICtab(null.ECF.Model, ECF.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## Model with beach is best#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.ECF.Model, ECF.Model), #
-                modnames = c("NULL", "FULL"), second.ord = TRUE))#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(ECF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, ECF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-ECF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(ECF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, ECF)#
-#
-## plot#
-ggplot(ssd, aes(x=ECF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")#
-#
-## compute profile CI and mean differences#
-confint(ECF.Model)#
-emmeans(ECF.Model, ~ Beach, transform = "response")#
-contrast(emmeans(ECF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
-(exp(0.864) / exp(1.364) ) ## % underestimated is 0.6065307#
-exp(0.864) - exp(1.364)    ## difference is on average 1.539177#
-#
-#### ----------------------------------------- #####
-#### Model for RMI#
-#### ----------------------------------------- #####
-#
+exp(0.811) - exp(1.265)    ## difference is on average 1.29
+contrast(emmeans(OCF.Model, specs="Beach", transform = "response"),list(c(-1,1)))
+exp(0.811) - exp(1.265)    ## difference is on average 1.29
+emmeans(OCF.Model, ~ Beach, transform = "response")
+OCF.Model
+coef(OCF.Model)
+fixef(OCF.Model)
+fixef(OCF.Model)$cond
+fixef(OCF.Model)$cond[1]
+(exp(fixef(OCF.Model)$cond[2]) / exp(fixef(OCF.Model)$cond[1]) ) ## % underestimated is 0.635
+exp(fixef(OCF.Model)$cond[2]) - exp(fixef(OCF.Model)$cond[1])    ## difference is on average 1.29
 null.RMI.Model <- glm(null.RMI.form, data = RMI, family=poisson(link="log"))#
 RMI.Model      <- glm(beach.RMI.form, data = RMI, family=poisson(link="log"))#
 #
@@ -900,16 +1146,14 @@ null.RMI.Model <- glmmTMB(formula = null.RMI.form, data= RMI, family=genpois(lin
 RMI.Model      <-  glmmTMB(formula = beach.RMI.form, data= RMI, family=genpois(link="log"),#
 						   control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
 summary(null.RMI.Model); sigma(null.RMI.Model) ## returns the dispersion parameter#
-summary(RMI.Model); sigma(RMI.Model) ## returns the dispersion parameter#
-## exp(RMI.Model$sdr$par.fixed[3]) ## compute from the model output#
+summary(RMI.Model); sigma(RMI.Model) ## returns the dispersion parameter
 ## Checking the models#
 testDispersion(null.RMI.Model); #
 testDispersion(RMI.Model )#
 simulationNULL <- simulateResiduals(fittedModel = null.RMI.Model, plot = F)#
 simulationALL  <- simulateResiduals(fittedModel = RMI.Model , plot = F)#
-plot(simulationNULL); plot(simulationALL)#
-## underdispersion still present in the both models#
-#
+plot(simulationNULL); #
+plot(simulationALL)
 ## Final comparison#
 ICtab(null.RMI.Model, RMI.Model ,#
 	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
@@ -933,19 +1177,20 @@ ssd                <-  rbind(simBEACH, RMI)#
 ## plot#
 ggplot(ssd, aes(x=RMI, fill= dist)) + facet_wrap(~Beach) + #
 	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
+      xlab("Remigration Interval") + ylab(NULL) + #
       scale_fill_manual(values =pal) + #
       scale_x_continuous(limits = c(NA, 10)) +#
       theme_classic(base_size=20) + #
       theme(legend.title=element_blank(), #
-            legend.position = "top")#
-#
-## compute profile CI and mea differences#
-confint(RMI.Model)#
-emmeans(RMI.Model, ~ 1, transform = "response")#
-emmeans(RMI.Model, ~ Beach, transform = "response")#
-contrast(emmeans(RMI.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
-#
+            legend.position = "top")
+confint(RMI.Model)
+emmeans(RMI.Model, ~ 1, transform = "response")
+emmeans(RMI.Model, ~ Beach, transform = "response")
+contrast(emmeans(RMI.Model, specs="Beach", transform = "response"),list(c(-1,1)))
+(exp(fixef(ECF.Model)$cond[2]) / exp(fixef(ECF.Model)$cond[1]) ) ## % underestimated is 0.6065307
+exp(fixef(ECF.Model)$cond[2]) - exp(fixef(ECF.Model)$cond[1])    ## difference is on average 1.539177
+(exp(fixef(RMI.Model)$cond[2]) / exp(fixef(RMI.Model)$cond[1]) ) ## % underestimated is 0.6065307
+exp(fixef(RMI.Model)$cond[2]) - exp(fixef(RMI.Model)$cond[1])    ## difference is on average 1.539177
 #### ----------------------------------------- #####
 #### Model for BP#
 #### ----------------------------------------- #####
@@ -971,7 +1216,7 @@ ICtab(BF.Model,#
 	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
 	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
 	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))	  #
+	  mnames=c("Poisson", "Generalized Poisson"))
 ## The final null and full model for the OCF data is a genpois model#
 null.BF.Model <- glmmTMB(formula = null.BF.form, data= BF, family=genpois(link="log"), na.action = na.exclude,#
                           control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")))#
@@ -981,17 +1226,16 @@ BF.Model      <-  glmmTMB(formula = beach.BF.form, data= BF, family=genpois(link
 summary(null.BF.Model); sigma(null.BF.Model) ## dispersion parameter#
 summary(BF.Model); sigma(BF.Model) ## dispersion parameter#
 #
-## by hand, this is computed as #
-exp(BF.Model$sdr$par.fixed[3])#
+## by hand, the dispersion parameter is computed as #
+exp(BF.Model$sdr$par.fixed[3])
+summary(BF.Model); sigma(BF.Model) ## dispersion parameter
 ## Checking the models#
 testDispersion(null.BF.Model); #
 testDispersion(BF.Model )#
 simulationNULL <- simulateResiduals(fittedModel = null.BF.Model, plot = F)#
 simulationALL  <- simulateResiduals(fittedModel = BF.Model , plot = F)#
 plot(simulationNULL); #
-plot(simulationALL)#
-## underdispersion still present in the both models#
-#
+plot(simulationALL)
 ## Final comparison#
 ICtab(null.BF.Model, BF.Model ,#
 	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
@@ -1001,8 +1245,7 @@ ICtab(null.BF.Model, BF.Model ,#
 #
 ## compute the evidence ratio#
 evidence(aictab(cand.set = list(null.BF.Model, BF.Model), #
-                modnames = c("NULL", "FULL"), second.ord = TRUE))#
-#
+                modnames = c("NULL", "FULL"), second.ord = TRUE))
 ## compare simulated data to the observed data #
 simBEACH <- lapply(simulate(BF.Model, seed = 1, nsim = 1000), function(x){ #
 	cbind(x, BF, dist="gen.pois")#
@@ -1020,19 +1263,13 @@ ggplot(ssd, aes(x=BF, fill= dist)) + facet_wrap(~Beach) + #
       scale_x_continuous(limits = c(NA, 10)) +#
       theme_classic(base_size=20) + #
       theme(legend.title=element_blank(), #
-            legend.position = "top")#
-#
-## compute profile CI and mean differences#
-confint(BF.Model)#
-emmeans(BF.Model, ~ Beach, transform = "response")#
-contrast(emmeans(BF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
-(exp(0.324) / exp(0.733))  ## % underestimated is 0.6643142#
-exp(0.733) - exp(0.324)    ## difference is on average 0.6986679#
-#
-#### ----------------------------------------- #####
-#### Model for RECRUITS#
-#### ----------------------------------------- #####
-#
+            legend.position = "top")
+(exp(fixef(BF.Model)$cond[2]) / exp(fixef(BF.Model)$cond[1]) ) ## % underestimated is 1.002551
+(exp(fixef(BF.Model)$cond[2])
+exp(fixef(BF.Model)
+)
+exp(fixef(BF.Model)$cond[1])
+exp(fixef(BF.Model)$cond[2]) - exp(fixef(BF.Model)$cond[1])    ## difference is on average 0.007159968
 RECRUIT <- FULL[[1]] %>% gather("Beach", "NestingStatus", -Year)#
 RECRUIT$Beach <- str_replace_all(RECRUIT$Beach, "Status.", "")#
 RECRUIT <- RECRUIT %>% transform(Year 			= as.numeric(Year), #
@@ -1052,7 +1289,29 @@ nester.counter <- function(dat){#
   dat <- sum(beach.filt$Freq)#
   return(dat)#
   })#
+}
+empAcounts <- data.frame(Year = as.factor(seq(2013, 2017, 1)),#
+                          NN   = apply(nester.counter(RECRUIT), 1, unlist))#
+RECRUIT <- left_join(RECRUIT, tempAcounts)#
+#
+## Count the number of recruits on the focal nestinng beach#
+recruit.counter <- function(dat){#
+  by(dat, dat$Year, FUN=function(x){#
+  ##FILTER BY BEACH #
+  beach.filt <- x[which(x$Beach == "Focal" & x$NestingStatus != "REM"), -5]#
+  ## SUM BY Year#
+  dat <- sum(beach.filt$Freq)#
+  return(dat)#
+  })#
 }#
+tempRcounts <- data.frame(Year  = as.factor(seq(2013, 2017, 1)),#
+                          Beach = "Focal",#
+                          REC   = apply(recruit.counter(RECRUIT), 1, unlist))
+RECRUIT     <- left_join(RECRUIT, tempRcounts)#
+RECRUIT$REC <- ifelse(is.na(RECRUIT$REC), RECRUIT$Freq, RECRUIT$RE) #
+Mod.dat <- RECRUIT %>% filter(NestingStatus != "REM") %>% dplyr::select(Year, Beach, REC, NN) %>% unique()#
+Mod.dat$Year <- as.numeric(as.character(Mod.dat$Year))#
+Mod.dat$Beach <- as.factor(Mod.dat$Beach)
 tempAcounts <- data.frame(Year = as.factor(seq(2013, 2017, 1)),#
                           NN   = apply(nester.counter(RECRUIT), 1, unlist))#
 RECRUIT <- left_join(RECRUIT, tempAcounts)#
@@ -1074,8 +1333,9 @@ RECRUIT     <- left_join(RECRUIT, tempRcounts)#
 RECRUIT$REC <- ifelse(is.na(RECRUIT$REC), RECRUIT$Freq, RECRUIT$RE) #
 Mod.dat <- RECRUIT %>% filter(NestingStatus != "REM") %>% dplyr::select(Year, Beach, REC, NN) %>% unique()#
 Mod.dat$Year <- as.numeric(as.character(Mod.dat$Year))#
-Mod.dat$Beach <- as.factor(Mod.dat$Beach)#
-#
+Mod.dat$Beach <- as.factor(Mod.dat$Beach)
+null.REC.form <- formula(cbind(REC, NN-REC) ~ 1)
+FULL.REC.form <- formula(cbind(REC, NN-REC) ~ Beach -1)
 ## write out model formulas#
 null.REC.form <- formula(cbind(REC, NN-REC) ~ 1)#
 FULL.REC.form <- formula(cbind(REC, NN-REC) ~ Beach -1)#
@@ -1097,260 +1357,15 @@ ICtab(null.REC.Model, REC.Model,#
 #
 ## compute the evidence ratio#
 evidence(aictab(cand.set = list(null.REC.Model, REC.Model), #
-                modnames = c("NULL", "RECRUIT"), second.ord = TRUE))#
-#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(REC.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, Mod.dat[,-c(1)], dist="binomial")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-c(4:5)]#
-Mod.dat$dist       <- "observed"#
-colnames(simBEACH) <- colnames(Mod.dat[,c(3,4,2,5)]) #
-ssd                <-  rbind(simBEACH, Mod.dat[,-1])
-## plot#
-ggplot(ssd, aes(x= REC/(REC+NN), fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-ssd$prop <- ssd$REC/(ssd$REC + ssd$NN)
-ggplot(ssd, aes(x= prop, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-## plot#
-ggplot(ssd, aes(x= prop, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_bar(position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-ssd
-head(ssd)
-ggplot(ssd[ssd$dist == "binomial"], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-## plot#
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_bar(position="dodge", colour=1)
-? geom_bar
-## plot#
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(position="dodge", colour=1)
-## plot#
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) #
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-## FULL model is best#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.BF.Model, BF.Model), #
-                modnames = c("NULL", "FULL"), second.ord = TRUE))#
-#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(BF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, BF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-BF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(BF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, BF)#
-#
-## plot#
-ggplot(ssd, aes(x=BF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Breeding Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-BF
-## 3: BP#
-BF <- FULL[[5]] %>% gather("Beach", "BF")#
-BF$Beach <- str_replace_all(BF$Beach, "BF.", "")#
-BF <- BF %>% transform(Beach = as.factor(Beach),#
-					   BF 	 = as.numeric(BF)) %>%#
-			   filter(!is.na(BF))
-## Final comparison#
-ICtab(null.BF.Model, BF.Model ,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## FULL model is best#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.BF.Model, BF.Model), #
-                modnames = c("NULL", "FULL"), second.ord = TRUE))#
-#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(BF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, BF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-BF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(BF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, BF)#
-#
-## plot#
-ggplot(ssd, aes(x=BF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Breeding Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-#### Model for RECRUITS#
-#### ----------------------------------------- #####
-#
-RECRUIT <- FULL[[1]] %>% gather("Beach", "NestingStatus", -Year)#
-RECRUIT$Beach <- str_replace_all(RECRUIT$Beach, "Status.", "")#
-RECRUIT <- RECRUIT %>% transform(Year 			= as.numeric(Year), #
-                                 Beach 			= as.factor(Beach),#
-                                 NestingStatus 	= as.factor(NestingStatus))#
-RECRUIT <- as.data.frame(table(RECRUIT[,1:3])) %>% filter(Freq>0)#
-## FOCAL = FALSE + TRUE#
-## ALL = NEO#
-## FOCAL overestimate proportion of neophytes#
-#
-## count the number of nesters annually#
-nester.counter <- function(dat){#
-  by(dat, dat$Year, FUN=function(x){#
-  ##FILTER BY BEACH #
-  beach.filt <- x[which(x$Beach == "All"),]#
-  ## SUM BY Year#
-  dat <- sum(beach.filt$Freq)#
-  return(dat)#
-  })#
-}#
-tempAcounts <- data.frame(Year = as.factor(seq(2013, 2017, 1)),#
-                          NN   = apply(nester.counter(RECRUIT), 1, unlist))#
-RECRUIT <- left_join(RECRUIT, tempAcounts)#
-#
-## Count the number of recruits on the focal nestinng beach#
-recruit.counter <- function(dat){#
-  by(dat, dat$Year, FUN=function(x){#
-  ##FILTER BY BEACH #
-  beach.filt <- x[which(x$Beach == "Focal" & x$NestingStatus != "REM"), -5]#
-  ## SUM BY Year#
-  dat <- sum(beach.filt$Freq)#
-  return(dat)#
-  })#
-}#
-tempRcounts <- data.frame(Year  = as.factor(seq(2013, 2017, 1)),#
-                          Beach = "Focal",#
-                          REC   = apply(recruit.counter(RECRUIT), 1, unlist))#
-RECRUIT     <- left_join(RECRUIT, tempRcounts)#
-RECRUIT$REC <- ifelse(is.na(RECRUIT$REC), RECRUIT$Freq, RECRUIT$RE) #
-Mod.dat <- RECRUIT %>% filter(NestingStatus != "REM") %>% dplyr::select(Year, Beach, REC, NN) %>% unique()#
-Mod.dat$Year <- as.numeric(as.character(Mod.dat$Year))#
-Mod.dat$Beach <- as.factor(Mod.dat$Beach)#
-#
-## write out model formulas#
-null.REC.form <- formula(cbind(REC, NN-REC) ~ 1)#
-FULL.REC.form <- formula(cbind(REC, NN-REC) ~ Beach -1)#
-#
-## fit binomial models#
-options(na.action = "na.fail") #
-null.REC.Model <- glm(null.REC.form, data = Mod.dat, family=binomial(link="logit"))#
-REC.Model      <- glm(FULL.REC.form, data = Mod.dat, family=binomial(link="logit"))#
-#
-summary(null.REC.Model);#
-summary(REC.Model);  #
-#
-## Final comparison#
-ICtab(null.REC.Model, REC.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## beach model is best out of the set#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.REC.Model, REC.Model), #
-                modnames = c("NULL", "RECRUIT"), second.ord = TRUE))#
-#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(REC.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, Mod.dat[,-c(1)], dist="binomial")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-c(4:5)]#
-Mod.dat$dist       <- "observed"#
-colnames(simBEACH) <- colnames(Mod.dat[,c(3,4,2,5)]) #
-ssd                <-  rbind(simBEACH, Mod.dat[,-1])#
-ssd$prop <- ssd$REC/(ssd$REC + ssd$NN)
-## plot#
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-ggplot(ssd[ssd$dist == "binomial",], aes(x= prop)) + facet_wrap(~Beach) + #
-	  geom_histogram(position="dodge", colour=1) +#
-      xlab("Proportion Recruits") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 1)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-summary(null.REC.Model);#
-summary(REC.Model);  #
-#
-## Final comparison#
-ICtab(null.REC.Model, REC.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## beach model is best out of the set#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.REC.Model, REC.Model), #
-                modnames = c("NULL", "RECRUIT"), second.ord = TRUE))#
-#
+                modnames = c("NULL", "RECRUIT"), second.ord = TRUE))
 ## compute profile CI and mean differences#
 confint(REC.Model)#
 emmeans(REC.Model, ~ 1, transform = "response")#
 emmeans(REC.Model, specs= c("Beach"), transform = "response")#
 contrast(emmeans(REC.Model, specs="Beach", transform = "response"), list(c(-1,1)))
-### TABLE OF ALL THE MODELS#
+(exp(fixef(REC.Model)$cond[2]) / exp(fixef(REC.Model)$cond[1]) ) ## % underestimated is 0.6640397
+(exp(coef(REC.Model)$cond[2]) / exp(coef(REC.Model)$cond[1]) ) ## % underestimated is 0.6640397
+contrast(emmeans(REC.Model, specs="Beach", transform = "response"), list(c(-1,1)))
 tab_model(null.BF.Model,  BF.Model,#
           show.stat = T, show.se = T, show.dev = T, show.loglik = T, #
           show.icc =T, show.ngroups = T, show.re.var = T, p.style = "numeric",#
@@ -1368,122 +1383,21 @@ tab_model(null.OCF.Model,  OCF.Model, #
           show.icc =T, show.ngroups = T, show.re.var = T, p.style = "numeric",#
           CSS = css_theme("regression"), collapse.ci = T, #transform = NULL,#
           #bootstrap = T, seed = 123, iterations = 1000,#
-          vcov.type = "HC0", digits = 2, p.val = "wald")
-# Compute each model#
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH"), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)#
-mod_names <- list(null.OCF.Model, OCF.Model, null.RMI.Model, RMI.Model, null.BF.Model, BF.Model)#
-library(ie2misc); library(qpcR)#
-for (i in seq_along(mod_names)) {#
-  summaryALL$rmse_value[i]   <- sjstats::rmse(mod_names[[i]])#
-  summaryALL$AICc_value[i]    <- AICc(mod_names[[i]])#
-  summaryALL$Deviance_Exp[i] <- summary(mod_names[[i]])$AICtab[4]#
-  summaryALL$RRS_value[i]    <- sum(residuals(mod_names[[i]])^2) #RSS(mod_names[[i]]) # Weighted sum of squares#
-}#
-summaryALL$delta_BIC <- c(#
-		ICtab(null.OCF.Model, OCF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.RMI.Model, RMI.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE, type = "AICc")$dAICc, #
-		ICtab(null.BF.Model, BF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)#
-summaryALL
-plot_models(null.BF.Model,  BF.Model, grid = TRUE)
-plot_models(null.BF.Model, BF.Model, null.RMI.Model, RMI.Model,  grid = TRUE)
-plot_models(BF.Model, RMI.Model,  grid = TRUE)
+          vcov.type = "HC0", digits = 2, p.val = "wald")#
+tab_model(null.ECF.Model,  ECF.Model, #
+          show.stat = T, show.se = T, show.dev = T, show.loglik = T, #
+          show.icc =T, show.ngroups = T, show.re.var = T, p.style = "numeric",#
+          CSS = css_theme("regression"), collapse.ci = T, #transform = NULL,#
+          #bootstrap = T, seed = 123, iterations = 1000,#
+          vcov.type = "HC0", digits = 2, p.val = "wald")#
 tab_model(null.REC.Model,  REC.Model, #
           show.stat = T, show.se = T, show.dev = T, show.loglik = T, #
           show.icc =T, show.ngroups = T, show.re.var = T, p.style = "numeric",#
           CSS = css_theme("regression"), collapse.ci = T, #transform = NULL,#
           #bootstrap = T, seed = 123, iterations = 1000,#
           vcov.type = "HC0", digits = 2, p.val = "wald")
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, REC.Model, grid = TRUE)
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, grid = TRUE)
-plot_models(REC.Model, grid = TRUE)
-## Plot model coefficients#
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-? plot_models
-plot_summs
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci.lvl = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci.lvl = 0.95,#
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-plot_models(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci.lvl = 0.95, confint = TRUE, digits = 3, inner_ci_level = .9, grid = TRUE)
-plot_summs(REC.Model, grid = TRUE)
-plot_summs(REC.Model, ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-plot_summs(REC.Model, ci_level = 0.95, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE)
-plot_summs(REC.Model, ci_level = 0.95, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, grid = TRUE)
-? plot_summs
-plot_summs(REC.Model, ci_level = 0.95, robust = TRUE, plot.distributions=T,#
-             confint = TRUE, digits = 3, inner_ci_level = .9, grid = TRUE)
-## Plot model coefficients#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, plot.distributions=T,#
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")))
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, plot.distributions=T,#
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH"))
-## Plot model coefficients#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH"))
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
-scale_x_continious
-scale_x_continuous
-## count models#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             scale_x_continuous(limits=c(NA, 1))
 ## Plot model coefficients#
 ## count models#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             scale_x_continuous(breaks=seq(1,5,1)) +#
-             theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
-## Plot model coefficients#
-## count models#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             scale_x_continuous(breaks=seq(1,5,0.5)) +#
-             theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             scale_x_continuous(breaks=seq(1, 5, 0.1)) +#
-             theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
 plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
             ci_level = 0.95, scale = TRUE, robust = TRUE, #
              confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
@@ -1491,77 +1405,15 @@ plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
                              "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
              scale_x_continuous(breaks=seq(1, 5, 0.3)) +#
              theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH",), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)#
-mod_names <- list(null.OCF.Model, OCF.Model, null.ECF.Model, ECF.Model, #
-                  null.RMI.Model, RMI.Model, null.BF.Model, BF.Model, #
-                  null.REC.Model, REC.Model)
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH",), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH"), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH"), #
-                         parms = NA, prof.confint = NA, rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH"), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)#
-mod_names <- list(null.OCF.Model, OCF.Model, null.ECF.Model, ECF.Model, #
-                  null.RMI.Model, RMI.Model, null.BF.Model, BF.Model, #
-                  null.REC.Model, REC.Model)#
-library(ie2misc); library(qpcR)
-for (i in seq_along(mod_names)) {#
-  summaryALL$rmse_value[i]   <- sjstats::rmse(mod_names[[i]])#
-  summaryALL$AICc_value[i]    <- AICc(mod_names[[i]])#
-  summaryALL$Deviance_Exp[i] <- summary(mod_names[[i]])$AICtab[4]#
-  summaryALL$RRS_value[i]    <- sum(residuals(mod_names[[i]])^2) #RSS(mod_names[[i]]) # Weighted sum of squares#
-}
-# Compute disgnostic stats (square root of the variance of the residuals) for each model #
-summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
-                                  "NULL ECF","ECF w/ BEACH",#
-                                  "NULL RMI","RMI w/ BEACH",#
-                                  "NULL BF","BF w/ BEACH", #
-                                  "NULL REC","REC w/ BEACH"), #
-                         rmse_value = NA, AICc_value = NA, Deviance_Exp = NA, RRS_value = NA)#
-mod_names <- list(null.OCF.Model, OCF.Model, null.ECF.Model, ECF.Model, #
-                  null.RMI.Model, RMI.Model, null.BF.Model, BF.Model, #
-                  null.REC.Model, REC.Model)#
-library(ie2misc); library(qpcR)#
-for (i in seq_along(mod_names)) {#
-  summaryALL$rmse_value[i]   <- sjstats::rmse(mod_names[[i]])#
-  summaryALL$AICc_value[i]    <- AICc(mod_names[[i]])#
-  summaryALL$Deviance_Exp[i] <- summary(mod_names[[i]])$AICtab[4]#
-  summaryALL$RRS_value[i]    <- sum(residuals(mod_names[[i]])^2) #RSS(mod_names[[i]]) # Weighted sum of squares#
-}
-AICtab(null.REC.Model)
-summary(null.REC.Model)$AICtab[4]
-summary(REC.Model)$AICtab[4]
-AIC(REC.Model)
-AICc(REC.Model)
-AICc(null.REC.Model)
-AICc(null.RMI.Model)
+## proportion model#
+plot_summs(REC.Model, ci_level = 0.95, robust = TRUE, plot.distributions=T,#
+            confint = TRUE, digits = 3, inner_ci_level = .9, grid = TRUE) +#
+           theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
+## proportion model#
+plot_summs(REC.Model, ci_level = 0.95, robust = TRUE, plot.distributions=T,#
+            confint = TRUE, digits = 3, inner_ci_level = .9, grid = TRUE) +#
+           theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))#
+#
 # Compute disgnostic stats (square root of the variance of the residuals) for each model #
 summaryALL <- data.frame(models=c("NULL OCF","OCF w/ BEACH",#
                                   "NULL ECF","ECF w/ BEACH",#
@@ -1578,30 +1430,6 @@ for (i in seq_along(mod_names)) {#
   summaryALL$AICc_value[i]   <- AICc(mod_names[[i]])#
   summaryALL$Deviance_Exp[i] <- AICc(mod_names[[i]])#
   summaryALL$RRS_value[i]    <- sum(residuals(mod_names[[i]])^2) #RSS(mod_names[[i]]) # Weighted sum of squares#
-}
-summaryALL$delta_AICc <- c(#
-		ICtab(null.OCF.Model, OCF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.RMI.Model, RMI.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE, type = "AICc")$dAICc, #
-		ICtab(null.BF.Model, BF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)#
-summaryALL
-summaryALL$delta_AICc <- c(#
-		ICtab(null.OCF.Model, OCF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.ECF.Model, ECF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE, type = "AICc")$dAICc, #
-		ICtab(null.RMI.Model, RMI.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc),#
-		ICtab(null.BF.Model, BF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)#
-		ICtab(null.REC.Model, REC.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)#
-summaryALL
-summaryALL$delta_AICc <- c(#
-		ICtab(null.OCF.Model, OCF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.ECF.Model, ECF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE, type = "AICc")$dAICc, #
-		ICtab(null.RMI.Model, RMI.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.BF.Model, BF.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
-		ICtab(null.REC.Model, REC.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)
-summaryALL
-ICtab(null.REC.Model, REC.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)
-ICtab(null.REC.Model, REC.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc
-ICtab(null.REC.Model, REC.Model, k=2, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")
-? ICtab
 }#
 summaryALL$delta_AICc <- c(#
 		ICtab(null.OCF.Model, OCF.Model, k=2, sort=F, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
@@ -1610,373 +1438,4 @@ summaryALL$delta_AICc <- c(#
 		ICtab(null.BF.Model, BF.Model, k=2, sort=F, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc,#
 		ICtab(null.REC.Model, REC.Model, k=2, sort=F, base=TRUE, weights=TRUE, logLik=TRUE,  type = "AICc")$dAICc)#
 summaryALL
-# Plot model coefficients#
-## count models#
-plot_summs(OCF.Model, ECF.Model, RMI.Model, BF.Model, #
-            ci_level = 0.95, scale = TRUE, robust = TRUE, #
-             confint = TRUE, digits = 3, inner_ci_level = .9, exp=T, grid = TRUE, #
-            model.names = c("OCF Model w/ BEACH","ECF Model w/ BEACH",#
-                             "RMI Model w/ BEACH","BF Model w/ BEACH")) +#
-             scale_x_continuous(breaks=seq(1, 5, 0.3)) +#
-             theme_sjplot2() + labs(x="Parameter Estimates", y="") + theme(text = element_text(size=25))
-ICtab(RMI.Model,#
-	  glmmTMB(formula = beach.RMI.form, data= RMI, family=genpois(link="log"), na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  glmmTMB(formula = beach.RMI.form, data= RMI, family=Gamma(link="log"), na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")))#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson", "Gamma"))
-mnames=c("Poisson", "Generalized Poisson"))#
-ICtab(RMI.Model,#
-	  glmmTMB(formula = beach.RMI.form, data= RMI, family=genpois(link="log"), na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  glmmTMB(formula = beach.RMI.form, data= RMI, family=Gamma(link="log"), na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))),#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson", "Gamma"))
-## The final null and full model for the OCF data is a genpois model#
-null.RMI.Model <- glmmTMB(formula = null.RMI.form, data= RMI, family=Gamma(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")),#
-                          na.action = na.exclude)#
-RMI.Model      <-  glmmTMB(formula = beach.RMI.form, data= RMI, family= Gamma(link="log"),#
-						   control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.RMI.Model); sigma(null.RMI.Model) ## returns the dispersion parameter#
-summary(RMI.Model); sigma(RMI.Model) ## returns the dispersion parameter#
-## exp(RMI.Model$sdr$par.fixed[3]) ## compute from the model output
-testDispersion(null.RMI.Model);
-testDispersion(RMI.Model )
-simulationNULL <- simulateResiduals(fittedModel = null.RMI.Model, plot = F)
-simulationALL  <- simulateResiduals(fittedModel = RMI.Model , plot = F)
-plot(simulationNULL); plot(simulationALL)
-plot(simulationNULL);
-## Final comparison#
-ICtab(null.RMI.Model, RMI.Model ,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## NULL model is best#
-#
-## compute the evidence rati
-## 2: RMI#
-RMI <- FULL[[4]] %>% gather("Beach", "RMI")#
-RMI$Beach <- str_replace_all(RMI$Beach, "RI.", "")#
-RMI <- RMI %>% transform(Beach = as.factor(Beach),#
-						 RMI 	 = as.numeric(RMI)) %>%#
-			   filter(!is.na(RMI))
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(RMI.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, RMI, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-RMI$dist           <- "observed"#
-colnames(simBEACH) <- colnames(RMI[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, RMI)#
-#
-## plot#
-ggplot(ssd, aes(x=RMI, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-plot#
-ggplot(ssd, aes(x=RMI, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Remigration Interval") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-## The final null and full model for the ECF data is a genpois model#
-null.ECF.Model <- glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude)#
-ECF.Model      <- glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.ECF.Model); sigma(null.ECF.Model) ## returns the dispersion parameter#
-summary(ECF.Model); sigma(ECF.Model)#
-#
-## Checking the models#
-testDispersion(null.ECF.Model); #
-testDispersion(ECF.Model);
-## The final null and full model for the ECF data is a genpois model#
-null.ECF.Model <- glmmTMB(formula = null.ECF.form, data= ECF, family=Gamma(link="log"), na.action = na.exclude)#
-ECF.Model      <- glmmTMB(formula = beach.ECF.form, data= ECF, family= Gamma(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.ECF.Model); sigma(null.ECF.Model) ## returns the dispersion parameter#
-summary(ECF.Model); sigma(ECF.Model)
-ECF <- FULL[[3]] %>% gather("Beach", "ECF")#
-ECF$Beach <- str_replace_all(ECF$Beach, "ECF.", "")#
-ECF <- ECF %>% transform(Beach = as.factor(Beach),#
-					   ECF 	 = as.numeric(ECF)) %>%#
-			 filter(!is.na(ECF))
-testDispersion(null.ECF.Model);
-testDispersion(ECF.Model);
-simulationNULL <- simulateResiduals(fittedModel = null.ECF.Model, plot = F, n = 1000)
-simulationALL  <- simulateResiduals(fittedModel = ECF.Model, plot = F, n = 1000)
-plot(simulationNULL)
-plot(simulationALL)
-## Final comparison#
-ICtab(null.ECF.Model, ECF.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## Model with beach is best
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(ECF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, ECF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-ECF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(ECF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, ECF)#
-#
-## plot#
-ggplot(ssd, aes(x=ECF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")
-## use a gen.pois model in the glmmTMB package and do distribution selection#
-ICtab(null.ECF.Model,#
-	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude),#
-	  glmmTMB(formula = null.ECF.form, data= ECF, family=Gamma(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson", "Gamma"))
-source("/Users/georgeglen/Documents/GitHub/Pfaller_et_al2021/functions.r")#
-#
-## Load each dataset in individually#
-setwd("~/Documents/GitHub/Pfaller_et_al2021")#
-FULL <- fun$importExcel(#
-  fileName = "nesting_dat.xlsx",#
-  sheetNames = c("Recruitment","OCF", "ECF","RMI","BF","Production"),#
-  nskip = 0#
-);#
-#
-## Seperate the datasets#
-## 1: Clutch Frequency#
-OCF <- FULL[[2]] %>% gather("Beach", "OCF")#
-OCF$Beach <- str_replace_all(OCF$Beach, "OCF.", "")#
-OCF <- OCF %>% transform(Beach = as.factor(Beach),#
-					   OCF 	 = as.numeric(OCF)) %>%#
-			 filter(!is.na(OCF))#
-#
-ECF <- FULL[[3]] %>% gather("Beach", "ECF")#
-ECF$Beach <- str_replace_all(ECF$Beach, "ECF.", "")#
-ECF <- ECF %>% transform(Beach = as.factor(Beach),#
-					   ECF 	 = as.numeric(ECF)) %>%#
-			 filter(!is.na(ECF))#
-#
-## 2: RMI#
-RMI <- FULL[[4]] %>% gather("Beach", "RMI")#
-RMI$Beach <- str_replace_all(RMI$Beach, "RI.", "")#
-RMI <- RMI %>% transform(Beach = as.factor(Beach),#
-						 RMI 	 = as.numeric(RMI)) %>%#
-			   filter(!is.na(RMI))#
-## 3: BP#
-BF <- FULL[[5]] %>% gather("Beach", "BF")#
-BF$Beach <- str_replace_all(BF$Beach, "BF.", "")#
-BF <- BF %>% transform(Beach = as.factor(Beach),#
-					   BF 	 = as.numeric(BF)) %>%#
-			   filter(!is.na(BF))#
-#
-#### ----------------------------------------- #####
-#### Models#
-#### ----------------------------------------- #####
-#
-## Write out the model formulas#
-## 1: OCF#
-null.OCF.form <- formula(OCF ~ 1)#
-beach.OCF.form <- formula(OCF ~ Beach - 1)#
-#
-null.ECF.form <- formula(ECF ~ 1)#
-beach.ECF.form <- formula(ECF ~ Beach - 1)#
-#
-## 2: RMI #
-null.RMI.form <- formula(RMI ~ 1)#
-beach.RMI.form <- formula(RMI ~ Beach - 1)#
-#
-## 3: BP#
-null.BF.form <- formula(BF ~ 1)#
-beach.BF.form <- formula(BF ~ Beach - 1)#
-#
-#### ----------------------------------------- #####
-#### Model for OCF#
-#### ----------------------------------------- #####
-#
-## Create initial models#
-null.OCF.Model <- glm(null.OCF.form, data = OCF, family=poisson(link="log"))#
-OCF.Model      <- glm(beach.OCF.form, data = OCF, family=poisson(link="log"))#
-#
-## check dispersion#
-testDispersion(null.OCF.Model); testDispersion(OCF.Model)#
-#
-## Overdispersoin not present so we do not need to fit a negative binomial #
-## model to account for overdispersion but underdispersion is present so lets #
-## use a gen.pois model in the glmmTMB package and do distribution selection#
-ICtab(null.OCF.Model,#
-	  glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))#
-ICtab(OCF.Model,#
-	  glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))	  #
-## The final null and full model for the OCF data is a genpois model#
-null.OCF.Model <- glmmTMB(formula = null.OCF.form, data= OCF, family=genpois(link="log"), na.action = na.exclude)#
-OCF.Model      <- glmmTMB(formula = beach.OCF.form, data= OCF, family=genpois(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.OCF.Model); sigma(null.OCF.Model) ## returns the dispersion parameter#
-summary(OCF.Model); sigma(OCF.Model)#
-#
-## Checking the models#
-simulationNULL <- simulateResiduals(fittedModel = null.OCF.Model, plot = F, n = 1000)#
-simulationALL  <- simulateResiduals(fittedModel = OCF.Model, plot = F, n = 1000)#
-plot(simulationNULL); plot(simulationALL)#
-testDispersion(simulationOutput = simulationNULL, alternative ="less") #
-testDispersion(simulationOutput = simulationALL, alternative ="less") #
-## underdispersion still present in the BEACH model#
-#
-## Final comparison#
-ICtab(null.OCF.Model, OCF.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## Model with beach is best between the two#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.OCF.Model, OCF.Model), #
-                modnames = c("NULL", "FULL"), #
-                second.ord = TRUE))#
-#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(OCF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, OCF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-OCF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(OCF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, OCF)#
-#
-## plot#
-pal= c("#999999","#000000")#
-ggplot(ssd, aes(x=OCF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Observed Clutch Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")#
-#
-## compute profile CI and mean differences#
-confint(OCF.Model)#
-emmeans(OCF.Model, ~ Beach, transform = "response")#
-#
-contrast(emmeans(OCF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
-(exp(0.811) / exp(1.265) ) ## % underestimated is 0.635#
-exp(0.811) - exp(1.265)    ## difference is on average 1.29#
-#
-#### ----------------------------------------- #####
-#### Model for ECF#
-#### ----------------------------------------- #####
-#
-null.ECF.Model <- glm(null.ECF.form, data = ECF, family=poisson(link="log"))#
-ECF.Model      <- glm(beach.ECF.form, data = ECF, family=poisson(link="log"))#
-#
-## check dispersion#
-testDispersion(null.ECF.Model); testDispersion(ECF.Model)#
-#
-## Overdispersoin not present so we do not need to fit a negative binomial #
-## model to account for overdispersion but underdispersion is present so lets #
-## use a gen.pois model in the glmmTMB package and do distribution selection#
-ICtab(null.ECF.Model,#
-	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))
-ICtab(ECF.Model,#
-	  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))),#
-	  glmmTMB(formula = beach.ECF.form, data= ECF, family=Gamma(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson", "Gamma"))
-## model to account for overdispersion but underdispersion is present so lets #
-## use a gen.pois model in the glmmTMB package and do distribution selection#
-ICtab(null.ECF.Model,#
-	  glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))#
-ICtab(ECF.Model,#
-	  glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),na.action = na.exclude,#
-	          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS"))), ## UPDATE THE MODEL DISTRIBUTIONS#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("Poisson", "Generalized Poisson"))
-## The final null and full model for the ECF data is a genpois model#
-null.ECF.Model <- glmmTMB(formula = null.ECF.form, data= ECF, family=genpois(link="log"), na.action = na.exclude)#
-ECF.Model      <- glmmTMB(formula = beach.ECF.form, data= ECF, family=genpois(link="log"),#
-                          control=glmmTMBControl(optimizer=optim, optArgs=list(method="BFGS")), na.action = na.exclude)#
-summary(null.ECF.Model); sigma(null.ECF.Model) ## returns the dispersion parameter#
-summary(ECF.Model); sigma(ECF.Model)
-## Checking the models#
-testDispersion(null.ECF.Model); #
-testDispersion(ECF.Model); #
-## underdispersion still present in the BEACH model#
-#
-simulationNULL <- simulateResiduals(fittedModel = null.ECF.Model, plot = F, n = 1000)#
-simulationALL  <- simulateResiduals(fittedModel = ECF.Model, plot = F, n = 1000)#
-plot(simulationNULL)#
-plot(simulationALL)#
-#
-## Final comparison
-## Final comparison#
-ICtab(null.ECF.Model, ECF.Model,#
-	  type = "AICc", delta = TRUE, base = TRUE, logLik= TRUE,#
-	  weights=T, #
-	  mnames=c("NULL", "~Beach"))#
-## Model with beach is best#
-#
-## compute the evidence ratio#
-evidence(aictab(cand.set = list(null.ECF.Model, ECF.Model), #
-                modnames = c("NULL", "FULL"), second.ord = TRUE))#
-## compare simulated data to the observed data #
-simBEACH <- lapply(simulate(ECF.Model, seed = 1, nsim = 1000), function(x){ #
-	cbind(x, ECF, dist="gen.pois")#
-	})#
-simBEACH           <- do.call(rbind, simBEACH)[,-3]#
-ECF$dist           <- "observed"#
-colnames(simBEACH) <- colnames(ECF[,c(2,1,3)]) #
-ssd                <-  rbind(simBEACH, ECF)#
-#
-## plot#
-ggplot(ssd, aes(x=ECF, fill= dist)) + facet_wrap(~Beach) + #
-	  geom_histogram(aes(y = ..density..), position="dodge", binwidth=1, colour=1) +#
-      xlab("Estimated Clutch Frequency") + ylab(NULL) + #
-      scale_fill_manual(values =pal) + #
-      scale_x_continuous(limits = c(NA, 10)) +#
-      theme_classic(base_size=20) + #
-      theme(legend.title=element_blank(), #
-            legend.position = "top")#
-#
-## compute profile CI and mean differences#
-confint(ECF.Model)#
-emmeans(ECF.Model, ~ Beach, transform = "response")#
-contrast(emmeans(ECF.Model, specs="Beach", transform = "response"),list(c(-1,1)))#
-(exp(0.864) / exp(1.364) ) ## % underestimated is 0.6065307#
-exp(0.864) - exp(1.364)    ## difference is on average 1.539177
-summary(BF.Model); sigma(BF.Model) ## dispersion parameter
-exp(BF.Model$sdr$par.fixed[3])
 q()
